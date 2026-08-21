@@ -89,10 +89,10 @@ public class Amy {
             String body = normalizedCommand.substring(9).trim();
             int byIndex = body.indexOf("/by");
             if (byIndex >= 0) {
-                return new Task(body.substring(0, byIndex).trim(), "D",
+                return new Deadline(body.substring(0, byIndex).trim(),
                         body.substring(byIndex + 3).trim());
             }
-            return new Task(body, "D", "");
+            return new Deadline(body, "");
         }
         if (normalizedCommand.startsWith("event ")) {
             String body = normalizedCommand.substring(6).trim();
@@ -102,14 +102,14 @@ public class Amy {
                 String description = body.substring(0, fromIndex).trim();
                 String from = body.substring(fromIndex + 5, toIndex).trim();
                 String to = body.substring(toIndex + 3).trim();
-                return new Task(description, "E", from + " to: " + to);
+                return new Event(description, from, to);
             }
-            return new Task(body, "E", "");
+            return new Event(body, "", "");
         }
         String description = normalizedCommand.startsWith("todo ")
                 ? normalizedCommand.substring(5).trim()
                 : originalCommand;
-        return new Task(description, "T", "");
+        return new Todo(description);
     }
 
     /**
