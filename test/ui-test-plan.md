@@ -53,7 +53,36 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
-## Test case 3: Mark a task done
+
+## Test case 3: Prompt for missing deadline date
+
+**Aim:** Confirm Amy rejects a deadline without `/by` text instead of displaying an empty deadline.
+
+**Inputs:**
+```text
+deadline return books
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Please specify a deadline in the format: deadline <description> /by <date/time>.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+## Test case 4: Mark a task done
 
 **Aim:** Confirm Amy marks an existing task as done and shows `[X]` in `list`.
 
@@ -94,7 +123,7 @@ Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
 
-## Test case 4: Unmark a task
+## Test case 5: Unmark a task
 
 **Aim:** Confirm Amy reverses a completed task back to not done.
 
@@ -140,7 +169,7 @@ Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
 
-## Test case 5: Mark invalid index
+## Test case 6: Mark invalid index
 
 **Aim:** Confirm Amy handles marking a non-existent task gracefully.
 
@@ -175,7 +204,67 @@ Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
 
-## Test case 6: Add typed tasks
+## Test case 7: Prompt for incomplete event
+
+**Aim:** Confirm Amy requires both `/from` and `/to` values for an event.
+
+**Inputs:**
+```text
+event project meeting /from Mon 2pm
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Please specify an event in the format: event <description> /from <start> /to <end>.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 8: Accept spaced deadline marker
+
+**Aim:** Confirm Amy accepts a deadline marker written as `/ by` and preserves the time text.
+
+**Inputs:**
+```text
+deadline water plants / by tmr 3pm
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Got it. I've added this task:
+  [D][ ] water plants (by: tmr 3pm)
+Now you have 1 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 9: Add typed tasks
 
 **Aim:** Confirm Amy stores todos, deadlines, and events with their type and date/time text.
 
@@ -225,7 +314,38 @@ Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
 
-## Test case 7: Unmark invalid index
+## Test case 10: Accept shorthand event times
+
+**Aim:** Confirm Amy accepts an event with two slash-separated times without `/from` and `/to` labels.
+
+**Inputs:**
+```text
+event pauls birthday/ 7pm/ 10pm
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Got it. I've added this task:
+  [E][ ] pauls birthday (from: 7pm to: 10pm)
+Now you have 1 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 11: Unmark invalid index
 
 **Aim:** Confirm Amy handles unmarking a non-existent task gracefully.
 

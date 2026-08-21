@@ -64,11 +64,19 @@ public class Amy {
                 }
             } else if (isTaskCommand(normalizedCommand) && taskCount < tasks.length) {
                 Task task = createTask(normalizedCommand, command);
-                tasks[taskCount] = task;
-                taskCount++;
-                System.out.println("Got it. I've added this task:");
-                System.out.println("  " + task.getFullDisplayText());
-                System.out.println("Now you have " + taskCount + " tasks in the list.");
+                if (task != null) {
+                    tasks[taskCount] = task;
+                    taskCount++;
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println("  " + task.getFullDisplayText());
+                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                } else if (normalizedCommand.startsWith("deadline ")) {
+                    System.out.println("Please specify a deadline in the format: "
+                            + "deadline <description> /by <date/time>.");
+                } else {
+                    System.out.println("Please specify an event in the format: "
+                            + "event <description> /from <start> /to <end>.");
+                }
             } else if (!isTaskCommand(normalizedCommand)) {
                 System.out.println("Please specify a task type: todo, deadline, or event.");
             }
@@ -88,23 +96,45 @@ public class Amy {
         if (normalizedCommand.startsWith("deadline ")) {
             String body = normalizedCommand.substring(9).trim();
             int byIndex = body.indexOf("/by");
-            if (byIndex >= 0) {
-                return new Deadline(body.substring(0, byIndex).trim(),
-                        body.substring(byIndex + 3).trim());
+            int markerLength = 3;
+            if (byIndex < 0) {
+                byIndex = body.indexOf("/ by");
+                markerLength = 4;
             }
-            return new Deadline(body, "");
+            if (byIndex >= 0 && !body.substring(byIndex + markerLength).trim().isEmpty()
+                    && !body.substring(0, byIndex).trim().isEmpty()) {
+                return new Deadline(body.substring(0, byIndex).trim(),
+                        body.substring(byIndex + markerLength).trim());
+            }
+            return null;
         }
         if (normalizedCommand.startsWith("event ")) {
             String body = normalizedCommand.substring(6).trim();
             int fromIndex = body.indexOf("/from");
             int toIndex = body.indexOf("/to", fromIndex + 5);
-            if (fromIndex >= 0 && toIndex >= 0) {
+            if (fromIndex >= 0 && toIndex >= 0
+                    && !body.substring(0, fromIndex).trim().isEmpty()
+                    && !body.substring(fromIndex + 5, toIndex).trim().isEmpty()
+                    && !body.substring(toIndex + 3).trim().isEmpty()) {
                 String description = body.substring(0, fromIndex).trim();
                 String from = body.substring(fromIndex + 5, toIndex).trim();
                 String to = body.substring(toIndex + 3).trim();
                 return new Event(description, from, to);
             }
-            return new Event(body, "", "");
+
+            int firstSlash = body.indexOf('/');
+            int secondSlash = firstSlash >= 0 ? body.indexOf('/', firstSlash + 1) : -1;
+            if (firstSlash >= 0 && secondSlash >= 0
+                    && !body.substring(0, firstSlash).trim().isEmpty()
+                    && !body.substring(firstSlash + 1, secondSlash).trim().isEmpty()
+                    && !body.substring(secondSlash + 1).trim().isEmpty()) {
+                String description = body.substring(0, firstSlash).trim();
+                String from = body.substring(firstSlash + 1, secondSlash).trim();
+                String to = body.substring(secondSlash + 1).trim();
+                return new Event(description, from, to);
+            }
+
+            return null;
         }
         String description = normalizedCommand.startsWith("todo ")
                 ? normalizedCommand.substring(5).trim()

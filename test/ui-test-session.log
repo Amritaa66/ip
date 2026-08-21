@@ -36,7 +36,28 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 
-=== Test case 3: Mark a task done ===
+=== Test case 3: Prompt for missing deadline date ===
+--- console input ---
+deadline return books
+bye
+--- console output ---
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Please specify a deadline in the format: deadline <description> /by <date/time>.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+
+=== Test case 4: Mark a task done ===
 --- console input ---
 todo buy milk
 mark 1
@@ -69,7 +90,7 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 
-=== Test case 4: Unmark a task ===
+=== Test case 5: Unmark a task ===
 --- console input ---
 todo buy milk
 mark 1
@@ -107,7 +128,7 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 
-=== Test case 5: Mark invalid index ===
+=== Test case 6: Mark invalid index ===
 --- console input ---
 todo buy milk
 mark 5
@@ -134,7 +155,51 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 
-=== Test case 6: Add typed tasks ===
+=== Test case 7: Prompt for incomplete event ===
+--- console input ---
+event project meeting /from Mon 2pm
+bye
+--- console output ---
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Please specify an event in the format: event <description> /from <start> /to <end>.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+
+=== Test case 8: Accept spaced deadline marker ===
+--- console input ---
+deadline water plants / by tmr 3pm
+bye
+--- console output ---
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Got it. I've added this task:
+  [D][ ] water plants (by: tmr 3pm)
+Now you have 1 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+
+=== Test case 9: Add typed tasks ===
 --- console input ---
 todo borrow book
 deadline return book /by Sunday
@@ -176,7 +241,30 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 
-=== Test case 7: Unmark invalid index ===
+=== Test case 10: Accept shorthand event times ===
+--- console input ---
+event pauls birthday/ 7pm/ 10pm
+bye
+--- console output ---
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Got it. I've added this task:
+  [E][ ] pauls birthday (from: 7pm to: 10pm)
+Now you have 1 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+
+=== Test case 11: Unmark invalid index ===
 --- console input ---
 todo buy milk
 unmark 5
