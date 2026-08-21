@@ -25,9 +25,9 @@ Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
 
-## Test case 2: Prompt for missing task type
+## Test case 2: Unknown command
 
-**Aim:** Confirm Amy prompts when task text has no todo, deadline, or event prefix.
+**Aim:** Confirm Amy reports an error when a command is not recognized.
 
 **Inputs:**
 ```text
@@ -47,7 +47,7 @@ Hello! I'm Amy.
 What can I do for you?
 ________________________________________________________________________________
 ________________________________________________________________________________
-Please specify a task type: todo, deadline, or event.
+I'm sorry, but I don't know what that means.
 ________________________________________________________________________________
 ________________________________________________________________________________
 Bye. Hope to see you again soon!
@@ -496,7 +496,123 @@ Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
 
-## Test case 15: Unmark invalid index
+## Test case 15: Empty todo description
+
+**Aim:** Confirm Amy reports an error when a todo has no description.
+
+**Inputs:**
+```text
+todo
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+A todo description cannot be empty.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 16: Unknown command
+
+**Aim:** Confirm Amy reports an error for an unsupported command without changing the list.
+
+**Inputs:**
+```text
+blah
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+I'm sorry, but I don't know what that means.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 17: Empty deadline command
+
+**Aim:** Confirm an empty deadline command reports a format error without crashing.
+
+**Inputs:**
+```text
+deadline
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Please specify a deadline in the format: deadline <description> /by <date/time>.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 18: Empty event command
+
+**Aim:** Confirm an empty event command reports a format error without crashing.
+
+**Inputs:**
+```text
+event
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Please specify an event in the format: event <description> /from <start> /to <end>.
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Test case 19: Unmark invalid index
 
 **Aim:** Confirm Amy handles unmarking a non-existent task gracefully.
 

@@ -23,6 +23,7 @@ public class Amy {
             String normalizedCommand = command.trim();
             System.out.println(separator);
 
+            try {
             if (normalizedCommand.equals("bye")) {
                 System.out.println("Bye. Hope to see you again soon!");
                 System.out.println(separator);
@@ -43,10 +44,10 @@ public class Amy {
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.println("  " + tasks[taskIndex].getFullDisplayText());
                     } else {
-                        System.out.println("That task does not exist.");
+                        throw new AmyException("That task does not exist.");
                     }
                 } catch (NumberFormatException ignored) {
-                    System.out.println("Please specify a valid task number.");
+                    throw new AmyException("Please specify a valid task number.");
                 }
             } else if (normalizedCommand.startsWith("unmark ")) {
                 try {
@@ -57,10 +58,10 @@ public class Amy {
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("  " + tasks[taskIndex].getFullDisplayText());
                     } else {
-                        System.out.println("That task does not exist.");
+                        throw new AmyException("That task does not exist.");
                     }
                 } catch (NumberFormatException ignored) {
-                    System.out.println("Please specify a valid task number.");
+                    throw new AmyException("Please specify a valid task number.");
                 }
             } else if (isTaskCommand(normalizedCommand) && taskCount < tasks.length) {
                 Task task = createTask(normalizedCommand, command);
@@ -71,14 +72,17 @@ public class Amy {
                     System.out.println("  " + task.getFullDisplayText());
                     System.out.println("Now you have " + taskCount + " tasks in the list.");
                 } else if (normalizedCommand.startsWith("deadline ")) {
-                    System.out.println("Please specify a deadline in the format: "
+                    throw new AmyException("Please specify a deadline in the format: "
                             + "deadline <description> /by <date/time>.");
                 } else {
-                    System.out.println("Please specify an event in the format: "
+                    throw new AmyException("Please specify an event in the format: "
                             + "event <description> /from <start> /to <end>.");
                 }
             } else if (!isTaskCommand(normalizedCommand)) {
-                System.out.println("Please specify a task type: todo, deadline, or event.");
+                throw new AmyException("I'm sorry, but I don't know what that means.");
+            }
+            } catch (AmyException exception) {
+                System.out.println(exception.getMessage());
             }
 
             System.out.println(separator);
@@ -92,9 +96,15 @@ public class Amy {
      * @param originalCommand the original input, used as a fallback description
      * @return the task represented by the command
      */
-    private static Task createTask(String normalizedCommand, String originalCommand) {
-        if (normalizedCommand.startsWith("deadline ")) {
-            String body = normalizedCommand.substring(9).trim();
+    private static Task createTask(String normalizedCommand, String originalCommand)
+            throws AmyException {
+        if (normalizedCommand.equals("todo")) {
+                throw new AmyException("A todo description cannot be empty.");
+        }
+        if (normalizedCommand.equals("deadline")
+                || normalizedCommand.startsWith("deadline ")) {
+            String body = normalizedCommand.equals("deadline")
+                    ? "" : normalizedCommand.substring(9).trim();
             int byIndex = body.indexOf("/by");
             int markerLength = 3;
             if (byIndex < 0) {
@@ -115,10 +125,13 @@ public class Amy {
                         body.substring(slashIndex + 1).trim());
             }
 
-            return null;
+            throw new AmyException("Please specify a deadline in the format: "
+                    + "deadline <description> /by <date/time>.");
         }
-        if (normalizedCommand.startsWith("event ")) {
-            String body = normalizedCommand.substring(6).trim();
+        if (normalizedCommand.equals("event")
+                || normalizedCommand.startsWith("event ")) {
+            String body = normalizedCommand.equals("event")
+                    ? "" : normalizedCommand.substring(6).trim();
             int fromIndex = body.indexOf("/from");
             int toIndex = body.indexOf("/to", fromIndex + 5);
             if (fromIndex >= 0 && toIndex >= 0
@@ -143,11 +156,15 @@ public class Amy {
                 return new Event(description, from, to);
             }
 
-            return null;
+            throw new AmyException("Please specify an event in the format: "
+                    + "event <description> /from <start> /to <end>.");
         }
         String description = normalizedCommand.startsWith("todo ")
                 ? normalizedCommand.substring(5).trim()
                 : originalCommand;
+        if (description.trim().isEmpty()) {
+            throw new AmyException("A todo description cannot be empty.");
+        }
         return new Todo(description);
     }
 
@@ -158,8 +175,8 @@ public class Amy {
      * @return true when the command starts with todo, deadline, or event
      */
     private static boolean isTaskCommand(String command) {
-        return command.startsWith("todo ")
-                || command.startsWith("deadline ")
-                || command.startsWith("event ");
+        return command.equals("todo") || command.startsWith("todo ")
+                || command.equals("deadline") || command.startsWith("deadline ")
+                || command.equals("event") || command.startsWith("event ");
     }
 }
