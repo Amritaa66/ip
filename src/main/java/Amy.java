@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Amy {
@@ -15,8 +16,7 @@ public class Amy {
         System.out.println("What can I do for you?");
         System.out.println(separator);
 
-        Task[] tasks = new Task[100];
-        int taskCount = 0;
+        ArrayList<Task> tasks = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
@@ -32,21 +32,21 @@ public class Amy {
 
             if (normalizedCommand.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + "." + tasks[i].getFullDisplayText());
+                for (int i = 0; i < tasks.size(); i++) {
+                    System.out.println((i + 1) + "." + tasks.get(i).getFullDisplayText());
                 }
-                } else if (normalizedCommand.equals("mark")
-                        || normalizedCommand.equals("unmark")
-                        || normalizedCommand.equals("delete")) {
-                    throw new AmyException("Please provide a task number.");
-                } else if (normalizedCommand.startsWith("mark ")) {
+            } else if (normalizedCommand.equals("mark")
+                    || normalizedCommand.equals("unmark")
+                    || normalizedCommand.equals("delete")) {
+                throw new AmyException("Please provide a task number.");
+            } else if (normalizedCommand.startsWith("mark ")) {
                 try {
                     int taskNumber = Integer.parseInt(normalizedCommand.substring(5).trim());
                     int taskIndex = taskNumber - 1;
-                    if (taskIndex >= 0 && taskIndex < taskCount) {
-                        tasks[taskIndex].markAsDone();
+                    if (taskIndex >= 0 && taskIndex < tasks.size()) {
+                        tasks.get(taskIndex).markAsDone();
                         System.out.println("Nice! I've marked this task as done:");
-                        System.out.println("  " + tasks[taskIndex].getFullDisplayText());
+                        System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
@@ -57,10 +57,10 @@ public class Amy {
                 try {
                     int taskNumber = Integer.parseInt(normalizedCommand.substring(7).trim());
                     int taskIndex = taskNumber - 1;
-                    if (taskIndex >= 0 && taskIndex < taskCount) {
-                        tasks[taskIndex].unmarkAsDone();
+                    if (taskIndex >= 0 && taskIndex < tasks.size()) {
+                        tasks.get(taskIndex).unmarkAsDone();
                         System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println("  " + tasks[taskIndex].getFullDisplayText());
+                        System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
@@ -71,30 +71,25 @@ public class Amy {
                 try {
                     int taskNumber = Integer.parseInt(normalizedCommand.substring(7).trim());
                     int taskIndex = taskNumber - 1;
-                    if (taskIndex >= 0 && taskIndex < taskCount) {
-                        Task deletedTask = tasks[taskIndex];
-                        for (int i = taskIndex; i < taskCount - 1; i++) {
-                            tasks[i] = tasks[i + 1];
-                        }
-                        tasks[taskCount - 1] = null;
-                        taskCount--;
+                    if (taskIndex >= 0 && taskIndex < tasks.size()) {
+                        Task deletedTask = tasks.get(taskIndex);
+                        tasks.remove(taskIndex);
                         System.out.println("Noted. I've removed this task:");
                         System.out.println("  " + deletedTask.getFullDisplayText());
-                        System.out.println("Now you have " + taskCount + " tasks in the list.");
+                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
                 } catch (NumberFormatException ignored) {
                     throw new AmyException("Please specify a valid task number.");
                 }
-            } else if (isTaskCommand(normalizedCommand) && taskCount < tasks.length) {
+            } else if (isTaskCommand(normalizedCommand)) {
                 Task task = createTask(normalizedCommand, command);
                 if (task != null) {
-                    tasks[taskCount] = task;
-                    taskCount++;
+                    tasks.add(task);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task.getFullDisplayText());
-                    System.out.println("Now you have " + taskCount + " tasks in the list.");
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                 } else if (normalizedCommand.startsWith("deadline ")) {
                     throw new AmyException("Please specify a deadline in the format: "
                             + "deadline <description> /by <date/time>.");
