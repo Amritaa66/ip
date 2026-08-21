@@ -47,6 +47,18 @@ public class Amy {
                 } catch (NumberFormatException ignored) {
                     // Ignore malformed mark commands.
                 }
+            } else if (command.startsWith("unmark ")) {
+                try {
+                    int taskNumber = Integer.parseInt(command.substring(7).trim());
+                    int taskIndex = taskNumber - 1;
+                    if (taskIndex >= 0 && taskIndex < taskCount) {
+                        completed[taskIndex] = false;
+                        System.out.println("OK, I've marked this task as not done yet:");
+                        System.out.println("  [ ] " + tasks[taskIndex]);
+                    }
+                } catch (NumberFormatException ignored) {
+                    // Ignore malformed unmark commands.
+                }
             } else if (taskCount < tasks.length) {
                 tasks[taskCount] = command;
                 taskCount++;
