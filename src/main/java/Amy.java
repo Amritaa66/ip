@@ -35,7 +35,11 @@ public class Amy {
                 for (int i = 0; i < taskCount; i++) {
                     System.out.println((i + 1) + "." + tasks[i].getFullDisplayText());
                 }
-            } else if (normalizedCommand.startsWith("mark ")) {
+                } else if (normalizedCommand.equals("mark")
+                        || normalizedCommand.equals("unmark")
+                        || normalizedCommand.equals("delete")) {
+                    throw new AmyException("Please provide a task number.");
+                } else if (normalizedCommand.startsWith("mark ")) {
                 try {
                     int taskNumber = Integer.parseInt(normalizedCommand.substring(5).trim());
                     int taskIndex = taskNumber - 1;
@@ -57,6 +61,26 @@ public class Amy {
                         tasks[taskIndex].unmarkAsDone();
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("  " + tasks[taskIndex].getFullDisplayText());
+                    } else {
+                        throw new AmyException("That task does not exist.");
+                    }
+                } catch (NumberFormatException ignored) {
+                    throw new AmyException("Please specify a valid task number.");
+                }
+            } else if (normalizedCommand.startsWith("delete ")) {
+                try {
+                    int taskNumber = Integer.parseInt(normalizedCommand.substring(7).trim());
+                    int taskIndex = taskNumber - 1;
+                    if (taskIndex >= 0 && taskIndex < taskCount) {
+                        Task deletedTask = tasks[taskIndex];
+                        for (int i = taskIndex; i < taskCount - 1; i++) {
+                            tasks[i] = tasks[i + 1];
+                        }
+                        tasks[taskCount - 1] = null;
+                        taskCount--;
+                        System.out.println("Noted. I've removed this task:");
+                        System.out.println("  " + deletedTask.getFullDisplayText());
+                        System.out.println("Now you have " + taskCount + " tasks in the list.");
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
