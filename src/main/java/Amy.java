@@ -43,9 +43,11 @@ public class Amy {
                         tasks[taskIndex].markAsDone();
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.println("  [X] " + tasks[taskIndex].getDescription());
+                    } else {
+                        System.out.println("That task does not exist.");
                     }
                 } catch (NumberFormatException ignored) {
-                    // Ignore malformed mark commands.
+                    System.out.println("Please specify a valid task number.");
                 }
             } else if (normalizedCommand.startsWith("unmark ")) {
                 try {
@@ -55,9 +57,11 @@ public class Amy {
                         tasks[taskIndex].unmarkAsDone();
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("  [ ] " + tasks[taskIndex].getDescription());
+                    } else {
+                        System.out.println("That task does not exist.");
                     }
                 } catch (NumberFormatException ignored) {
-                    // Ignore malformed unmark commands.
+                    System.out.println("Please specify a valid task number.");
                 }
             } else if (taskCount < tasks.length) {
                 tasks[taskCount] = new Task(command);
