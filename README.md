@@ -15,11 +15,17 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    In the same dialog, set the **Project language level** field to the `SDK default` option.
 1. After that, locate the `src/main/java/Amy.java` file, right-click it, and choose `Run Amy.main()` (if the code editor is showing compile errors, try restarting the IDE). If the setup is correct, you should see something like the below as the output:
    ```
+   ________________________________________________________________________________
     A     m   m  y   y
    A A    mm mm   y y
   AAAAA   m m m    y
   A   A   m   m    y
   A   A   m   m    y
+   Hello! I'm Amy.
+   What can I do for you?
+   ________________________________________________________________________________
+   Bye. Hope to see you again soon!
+   ________________________________________________________________________________
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
