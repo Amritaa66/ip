@@ -106,6 +106,15 @@ public class Amy {
                 return new Deadline(body.substring(0, byIndex).trim(),
                         body.substring(byIndex + markerLength).trim());
             }
+
+            int slashIndex = body.indexOf('/');
+            if (slashIndex >= 0
+                    && !body.substring(0, slashIndex).trim().isEmpty()
+                    && !body.substring(slashIndex + 1).trim().isEmpty()) {
+                return new Deadline(body.substring(0, slashIndex).trim(),
+                        body.substring(slashIndex + 1).trim());
+            }
+
             return null;
         }
         if (normalizedCommand.startsWith("event ")) {
