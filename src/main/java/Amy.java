@@ -32,8 +32,7 @@ public class Amy {
             if (normalizedCommand.equals("list")) {
                 System.out.println("Here are the tasks in your list:");
                 for (int i = 0; i < taskCount; i++) {
-                    System.out.println((i + 1) + ".[" + tasks[i].getStatusIcon() + "] "
-                            + tasks[i].getDescription());
+                    System.out.println((i + 1) + "." + tasks[i].getFullDisplayText());
                 }
             } else if (normalizedCommand.startsWith("mark ")) {
                 try {
@@ -42,7 +41,7 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < taskCount) {
                         tasks[taskIndex].markAsDone();
                         System.out.println("Nice! I've marked this task as done:");
-                        System.out.println("  [X] " + tasks[taskIndex].getDescription());
+                        System.out.println("  " + tasks[taskIndex].getFullDisplayText());
                     } else {
                         System.out.println("That task does not exist.");
                     }
@@ -56,20 +55,72 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < taskCount) {
                         tasks[taskIndex].unmarkAsDone();
                         System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println("  [ ] " + tasks[taskIndex].getDescription());
+                        System.out.println("  " + tasks[taskIndex].getFullDisplayText());
                     } else {
                         System.out.println("That task does not exist.");
                     }
                 } catch (NumberFormatException ignored) {
                     System.out.println("Please specify a valid task number.");
                 }
-            } else if (taskCount < tasks.length) {
-                tasks[taskCount] = new Task(command);
+            } else if (isTaskCommand(normalizedCommand) && taskCount < tasks.length) {
+                Task task = createTask(normalizedCommand, command);
+                tasks[taskCount] = task;
                 taskCount++;
-                System.out.println("added: " + command);
+                System.out.println("Got it. I've added this task:");
+                System.out.println("  " + task.getFullDisplayText());
+                System.out.println("Now you have " + taskCount + " tasks in the list.");
+            } else if (!isTaskCommand(normalizedCommand)) {
+                System.out.println("Please specify a task type: todo, deadline, or event.");
             }
 
             System.out.println(separator);
         }
+    }
+
+    /**
+     * Converts a task command into a task object without parsing dates.
+     *
+     * @param normalizedCommand the trimmed command
+     * @param originalCommand the original input, used as a fallback description
+     * @return the task represented by the command
+     */
+    private static Task createTask(String normalizedCommand, String originalCommand) {
+        if (normalizedCommand.startsWith("deadline ")) {
+            String body = normalizedCommand.substring(9).trim();
+            int byIndex = body.indexOf("/by");
+            if (byIndex >= 0) {
+                return new Task(body.substring(0, byIndex).trim(), "D",
+                        body.substring(byIndex + 3).trim());
+            }
+            return new Task(body, "D", "");
+        }
+        if (normalizedCommand.startsWith("event ")) {
+            String body = normalizedCommand.substring(6).trim();
+            int fromIndex = body.indexOf("/from");
+            int toIndex = body.indexOf("/to", fromIndex + 5);
+            if (fromIndex >= 0 && toIndex >= 0) {
+                String description = body.substring(0, fromIndex).trim();
+                String from = body.substring(fromIndex + 5, toIndex).trim();
+                String to = body.substring(toIndex + 3).trim();
+                return new Task(description, "E", from + " to: " + to);
+            }
+            return new Task(body, "E", "");
+        }
+        String description = normalizedCommand.startsWith("todo ")
+                ? normalizedCommand.substring(5).trim()
+                : originalCommand;
+        return new Task(description, "T", "");
+    }
+
+    /**
+     * Checks whether a command explicitly identifies a supported task type.
+     *
+     * @param command the trimmed user command
+     * @return true when the command starts with todo, deadline, or event
+     */
+    private static boolean isTaskCommand(String command) {
+        return command.startsWith("todo ")
+                || command.startsWith("deadline ")
+                || command.startsWith("event ");
     }
 }
