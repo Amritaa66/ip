@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+import shutil
 
 
 CASE_PATTERN = re.compile(r"^##\s+Test case\b.*?(?=^##\s+Test case\b|\Z)",
@@ -78,6 +79,8 @@ def main() -> int:
     args.session_log.parent.mkdir(parents=True, exist_ok=True)
     with args.session_log.open("w", encoding="utf-8") as log:
         for number, (name, inputs, expected) in enumerate(cases, start=1):
+            shutil.rmtree("data", ignore_errors=True)  # reset state before each test case
+
             result = subprocess.run(
                 args.program,
                 input=inputs,

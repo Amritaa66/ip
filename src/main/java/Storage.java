@@ -52,10 +52,14 @@ public class Storage {
             if (savedTask.isBlank()) {
                 continue;
             }
-            String[] parts = savedTask.split(" \\| ", -1);
-            Task task = createTask(parts);
-            if (task != null) {
-                tasks.add(task);
+            try {
+                String[] parts = savedTask.split(" \\| ", -1);
+                Task task = createTask(parts);
+                if (task != null) {
+                    tasks.add(task);
+                }
+            } catch (RuntimeException e) {
+                System.out.println("Skipping corrupted save entry: " + savedTask);
             }
         }
         return tasks;
@@ -113,7 +117,7 @@ public class Storage {
         String header = task.getTypeIcon() + " | " + (task.isDone() ? "1" : "0")
                 + " | " + escape(task.getDescription());
         if (task instanceof Deadline deadline) {
-            return header + " | " + escape(deadline.getBy());
+            return header + " | " + escape(deadline.getBy().format(Deadline.INPUT_FORMAT));
         }
         if (task instanceof Event event) {
             return header + " | " + escape(event.getFrom()) + " | " + escape(event.getTo());
