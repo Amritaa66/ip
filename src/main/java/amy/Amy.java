@@ -2,6 +2,7 @@ package amy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import amy.task.Task;
 
 public class Amy {
@@ -149,6 +150,11 @@ public class Amy {
         }
     }
 
+    /**
+     * Starts Amy using the default task save file.
+     *
+     * @param args command-line arguments, which are not used
+     */
     public static void main(String[] args) {
         new Amy("data/amy.txt").run();
     }
