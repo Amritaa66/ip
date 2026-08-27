@@ -2,6 +2,7 @@ package amy;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import amy.task.Task;
 
@@ -40,7 +41,24 @@ public class Amy {
                 break;
             }
 
-            if (normalizedCommand.equals("list")) {
+            if (normalizedCommand.equals("find")) {
+                throw new AmyException("Please provide a keyword.");
+            } else if (normalizedCommand.startsWith("find ")) {
+                String keyword = normalizedCommand.substring(5).trim().toLowerCase(Locale.ROOT);
+                boolean foundMatch = false;
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(keyword)) {
+                        if (!foundMatch) {
+                            ui.showMessage("Here are the matching tasks in your list:");
+                            foundMatch = true;
+                        }
+                        ui.showMessage((i + 1) + "." + tasks.get(i).getFullDisplayText());
+                    }
+                }
+                if (!foundMatch) {
+                    ui.showMessage("There are no matching tasks in your list!");
+                }
+            } else if (normalizedCommand.equals("list")) {
                 if (tasks.isEmpty()) {
                     ui.showMessage("There are no tasks in your list!");
                 } else {
