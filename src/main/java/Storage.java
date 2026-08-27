@@ -10,7 +10,16 @@ import java.util.ArrayList;
  * Saves Amy's task list to a file on the hard disk.
  */
 public class Storage {
-    private static final Path SAVE_FILE = Path.of("data", "amy.txt");
+    private final Path saveFile;
+
+    /**
+     * Creates storage backed by the specified file.
+     *
+     * @param filePath path of the file used to save and load tasks
+     */
+    public Storage(String filePath) {
+        saveFile = Path.of(filePath);
+    }
 
     /**
      * Rewrites the save file with the current task list.
@@ -18,8 +27,8 @@ public class Storage {
      * @param tasks the tasks to save
      * @throws IOException if the data directory or save file cannot be written
      */
-    public static void save(ArrayList<Task> tasks) throws IOException {
-        Files.createDirectories(SAVE_FILE.getParent());
+    public void save(ArrayList<Task> tasks) throws IOException {
+        Files.createDirectories(saveFile.getParent());
         ArrayList<String> savedTasks = new ArrayList<>();
         for (Task task : tasks) {
             if (task != null) {
@@ -27,7 +36,7 @@ public class Storage {
             }
         }
 
-        Path temporaryFile = Files.createTempFile(SAVE_FILE.getParent(), "amy-", ".tmp");
+        Path temporaryFile = Files.createTempFile(saveFile.getParent(), "amy-", ".tmp");
         try {
             Files.write(temporaryFile, savedTasks, StandardCharsets.UTF_8);
             replaceSaveFile(temporaryFile);
@@ -42,13 +51,13 @@ public class Storage {
      * @return the tasks stored on the hard disk
      * @throws IOException if the save file cannot be read
      */
-    public static ArrayList<Task> load() throws IOException {
+    public ArrayList<Task> load() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
-        if (!Files.exists(SAVE_FILE)) {
+        if (!Files.exists(saveFile)) {
             return tasks;
         }
 
-        for (String savedTask : Files.readAllLines(SAVE_FILE, StandardCharsets.UTF_8)) {
+        for (String savedTask : Files.readAllLines(saveFile, StandardCharsets.UTF_8)) {
             if (savedTask.isBlank()) {
                 continue;
             }
@@ -131,12 +140,12 @@ public class Storage {
      * @param temporaryFile the completed temporary save file
      * @throws IOException if the save file cannot be replaced
      */
-    private static void replaceSaveFile(Path temporaryFile) throws IOException {
+    private void replaceSaveFile(Path temporaryFile) throws IOException {
         try {
-            Files.move(temporaryFile, SAVE_FILE, StandardCopyOption.ATOMIC_MOVE,
+            Files.move(temporaryFile, saveFile, StandardCopyOption.ATOMIC_MOVE,
                     StandardCopyOption.REPLACE_EXISTING);
         } catch (AtomicMoveNotSupportedException exception) {
-            Files.move(temporaryFile, SAVE_FILE, StandardCopyOption.REPLACE_EXISTING);
+            Files.move(temporaryFile, saveFile, StandardCopyOption.REPLACE_EXISTING);
         }
     }
 
