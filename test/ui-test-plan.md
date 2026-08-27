@@ -1,5 +1,8 @@
 # Amy UI test plan
 
+> Run the automated cases from a temporary directory with `test/run-amy-isolated.sh`.
+> The launcher gives every case a fresh save file; the manual check below verifies loading.
+
 ## Test case 1: Exit immediately
 
 **Aim:** Confirm that Amy prints the farewell and exits when the user enters `bye`.
@@ -789,3 +792,87 @@ ________________________________________________________________________________
 Bye. Hope to see you again soon!
 ________________________________________________________________________________
 ```
+
+## Test case 23: Delete a task
+
+**Aim:** Confirm Amy removes the selected task, leaving the remaining task in the list.
+
+**Inputs:**
+```text
+todo buy milk
+todo read book
+delete 1
+list
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+Got it. I've added this task:
+  [T][ ] buy milk
+Now you have 1 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 2 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Noted. I've removed this task:
+  [T][ ] buy milk
+Now you have 1 tasks in the list.
+________________________________________________________________________________
+________________________________________________________________________________
+Here are the tasks in your list:
+1.[T][ ] read book
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```
+
+## Manual check: Load saved tasks at startup
+
+**Aim:** Confirm Amy restores saved todo, deadline, and event tasks with their completion status.
+
+**Setup:** Create `data/amy.txt` with the following content, then start Amy in the same project directory:
+
+```text
+T | 1 | read book
+D | 0 | return book | Sunday
+E | 1 | project meeting | Mon 2pm | 4pm
+```
+
+**Manual commands:**
+```text
+list
+bye
+```
+
+**Expected list:**
+```text
+Here are the tasks in your list:
+1.[T][X] read book
+2.[D][ ] return book (by: Sunday)
+3.[E][X] project meeting (from: Mon 2pm to: 4pm)
+```
+
+## Manual check: Corrupt records and delimiter characters
+
+**Aim:** Confirm unreadable records do not prevent valid records from loading, and task text
+containing ` | ` is preserved after a restart.
+
+**Steps:** Start Amy with a save file containing blank lines, invalid status values, unknown task
+types, and incomplete deadline/event records alongside a valid task. Confirm `list` shows only the
+valid task. Then add a task whose description contains ` | `, restart Amy, and confirm `list`
+shows the original description unchanged.

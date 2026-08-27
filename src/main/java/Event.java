@@ -27,4 +27,23 @@ public class Event extends Task {
     public String getDisplayText() {
         return description + " (from: " + from + " to: " + to + ")";
     }
+
+    /**
+     * Returns the event start time text.
+     *
+     * @return the event start time text
+     */
+    public String getFrom() {
+        return from;
+    }
+
+    /**
+     * Returns the event end time text.
+     *
+     * @return the event end time text
+     */
+    public String getTo() {
+        return to;
+    }
+
 }

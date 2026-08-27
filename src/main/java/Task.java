@@ -39,6 +39,15 @@ public class Task {
     }
 
     /**
+     * Returns whether this task has been completed.
+     *
+     * @return true if this task is complete
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
      * Returns this task's description.
      *
      * @return the task description
@@ -73,4 +82,5 @@ public class Task {
     public String getFullDisplayText() {
         return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + getDisplayText();
     }
+
 }

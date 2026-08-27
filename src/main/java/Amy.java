@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,7 +17,7 @@ public class Amy {
         System.out.println("What can I do for you?");
         System.out.println(separator);
 
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = loadTasks();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
@@ -45,6 +46,7 @@ public class Amy {
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.get(taskIndex).markAsDone();
+                        saveTasks(tasks);
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
@@ -59,6 +61,7 @@ public class Amy {
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.get(taskIndex).unmarkAsDone();
+                        saveTasks(tasks);
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
@@ -74,6 +77,7 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         Task deletedTask = tasks.get(taskIndex);
                         tasks.remove(taskIndex);
+                        saveTasks(tasks);
                         System.out.println("Noted. I've removed this task:");
                         System.out.println("  " + deletedTask.getFullDisplayText());
                         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -87,6 +91,7 @@ public class Amy {
                 Task task = createTask(normalizedCommand, command);
                 if (task != null) {
                     tasks.add(task);
+                    saveTasks(tasks);
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task.getFullDisplayText());
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -105,6 +110,33 @@ public class Amy {
             }
 
             System.out.println(separator);
+        }
+    }
+
+    /**
+     * Saves the task list and reports an error if the hard disk cannot be written.
+     *
+     * @param tasks the current task list
+     */
+    private static void saveTasks(ArrayList<Task> tasks) {
+        try {
+            Storage.save(tasks);
+        } catch (IOException | SecurityException exception) {
+            System.out.println("Unable to save tasks to the hard disk.");
+        }
+    }
+
+    /**
+     * Loads the previous task list and starts with an empty list if it cannot be read.
+     *
+     * @return the tasks loaded from the hard disk
+     */
+    private static ArrayList<Task> loadTasks() {
+        try {
+            return Storage.load();
+        } catch (IOException | SecurityException exception) {
+            System.out.println("Unable to load tasks from the hard disk.");
+            return new ArrayList<>();
         }
     }
 
