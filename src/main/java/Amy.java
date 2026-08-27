@@ -5,9 +5,10 @@ public class Amy {
     public static void main(String[] args) {
         Ui ui = new Ui();
         Parser parser = new Parser();
+        Storage storage = new Storage("data/amy.txt");
         ui.showWelcome();
 
-        TaskList tasks = new TaskList(loadTasks());
+        TaskList tasks = new TaskList(loadTasks(storage));
         while (ui.hasNextCommand()) {
             String command = ui.readCommand();
             String normalizedCommand = command.trim();
@@ -38,7 +39,7 @@ public class Amy {
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.get(taskIndex).markAsDone();
-                        saveTasks(tasks.asList());
+                        saveTasks(storage, tasks.asList());
                         System.out.println("Nice! I've marked this task as done:");
                         System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
@@ -53,7 +54,7 @@ public class Amy {
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.get(taskIndex).unmarkAsDone();
-                        saveTasks(tasks.asList());
+                        saveTasks(storage, tasks.asList());
                         System.out.println("OK, I've marked this task as not done yet:");
                         System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
@@ -69,7 +70,7 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         Task deletedTask = tasks.get(taskIndex);
                         tasks.remove(taskIndex);
-                        saveTasks(tasks.asList());
+                        saveTasks(storage, tasks.asList());
                         System.out.println("Noted. I've removed this task:");
                         System.out.println("  " + deletedTask.getFullDisplayText());
                         System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -83,7 +84,7 @@ public class Amy {
                 Task task = parser.createTask(normalizedCommand, command);
                 if (task != null) {
                     tasks.add(task);
-                    saveTasks(tasks.asList());
+                    saveTasks(storage, tasks.asList());
                     System.out.println("Got it. I've added this task:");
                     System.out.println("  " + task.getFullDisplayText());
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
@@ -110,9 +111,9 @@ public class Amy {
      *
      * @param tasks the current task list
      */
-    private static void saveTasks(ArrayList<Task> tasks) {
+    private static void saveTasks(Storage storage, ArrayList<Task> tasks) {
         try {
-            Storage.save(tasks);
+            storage.save(tasks);
         } catch (IOException | SecurityException exception) {
             System.out.println("Unable to save tasks to the hard disk.");
         }
@@ -123,9 +124,9 @@ public class Amy {
      *
      * @return the tasks loaded from the hard disk
      */
-    private static ArrayList<Task> loadTasks() {
+    private static ArrayList<Task> loadTasks(Storage storage) {
         try {
-            return Storage.load();
+            return storage.load();
         } catch (IOException | SecurityException exception) {
             System.out.println("Unable to load tasks from the hard disk.");
             return new ArrayList<>();
