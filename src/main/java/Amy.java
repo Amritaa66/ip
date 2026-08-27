@@ -38,7 +38,7 @@ public class Amy {
                     int taskNumber = Integer.parseInt(normalizedCommand.substring(5).trim());
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
-                        tasks.get(taskIndex).markAsDone();
+                        tasks.mark(taskIndex);
                         saveTasks(storage, tasks.asList());
                         ui.showMessage("Nice! I've marked this task as done:");
                         ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
@@ -53,7 +53,7 @@ public class Amy {
                     int taskNumber = Integer.parseInt(normalizedCommand.substring(7).trim());
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
-                        tasks.get(taskIndex).unmarkAsDone();
+                        tasks.unmark(taskIndex);
                         saveTasks(storage, tasks.asList());
                         ui.showMessage("OK, I've marked this task as not done yet:");
                         ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());

@@ -30,6 +30,12 @@ public class TaskList {
 
     public Task remove(int index) { return tasks.remove(index); }
 
+    /** Marks the task at the given zero-based index as done. */
+    public void mark(int index) { tasks.get(index).markAsDone(); }
+
+    /** Marks the task at the given zero-based index as not done. */
+    public void unmark(int index) { tasks.get(index).unmarkAsDone(); }
+
     /** @return the current tasks for persistence */
     public ArrayList<Task> asList() { return tasks; }
 }
