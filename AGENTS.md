@@ -36,6 +36,12 @@ test-ui skill to run the plan and record the console session. Report any
 failure with the expected and actual output before considering the update
 complete.
 
+## JUnit test coverage:
+
+Maintain JUnit tests for the highest-value approximately 50% of methods, prioritizing complex,
+core, or business-critical logic. Update the relevant JUnit tests after every code change so this
+coverage target remains satisfied.
+
 ## Git
 
 Use lightweight tags unless the user requests an annotated tag.
