@@ -168,16 +168,24 @@ public class Amy {
             }
             if (byIndex >= 0 && !body.substring(byIndex + markerLength).trim().isEmpty()
                     && !body.substring(0, byIndex).trim().isEmpty()) {
-                return new Deadline(body.substring(0, byIndex).trim(),
-                        body.substring(byIndex + markerLength).trim());
+                try {
+                    return new Deadline(body.substring(0, byIndex).trim(),
+                            body.substring(byIndex + markerLength).trim());
+                } catch (java.time.format.DateTimeParseException e) {
+                    throw new AmyException("Please use the date format: d/M/yyyy HHmm, e.g. 2/12/2019 1800");
+                }
             }
 
             int slashIndex = body.indexOf('/');
             if (slashIndex >= 0
                     && !body.substring(0, slashIndex).trim().isEmpty()
                     && !body.substring(slashIndex + 1).trim().isEmpty()) {
-                return new Deadline(body.substring(0, slashIndex).trim(),
-                        body.substring(slashIndex + 1).trim());
+                try {
+                    return new Deadline(body.substring(0, slashIndex).trim(),
+                            body.substring(slashIndex + 1).trim());
+                } catch (java.time.format.DateTimeParseException e) {
+                    throw new AmyException("Please use the date format: d/M/yyyy HHmm, e.g. 2/12/2019 1800");
+                }
             }
 
             throw new AmyException("Please specify a deadline in the format: "
