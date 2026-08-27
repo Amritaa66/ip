@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import amy.task.Task;
 
+/**
+ * Coordinates Amy's user interface, command parsing, task management, and storage.
+ */
 public class Amy {
     private final Ui ui;
     private final Parser parser;
