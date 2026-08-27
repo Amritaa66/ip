@@ -9,6 +9,15 @@ https://se-education.org/guides/conventions/java/intermediate.html
 Use the skill for every Java code change, including package/import organization, naming, formatting,
 braces, line length, Javadocs, and the prescribed JUnit test naming convention.
 
+## Git standard:
+
+All future commits and branches must follow the project-specific `seedu-git-standard` skill, based
+on the SE-EDU Git conventions: https://se-education.org/guides/conventions/git.html
+
+Before committing, use an imperative, capitalized subject without a period, keep it within 72
+characters, and include a wrapped explanatory body for non-trivial changes. Use meaningful
+kebab-case branch names.
+
 This repository is a starter template for a greenfield Java project used in an introductory software engineering course in an undergraduate computer science program. Students use it as the starting point for their own projects.
 
 # Default user context
