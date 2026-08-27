@@ -1,3 +1,5 @@
+package amy.task;
+
 /**
  * Represents a task occurring during a specified time range.
  */

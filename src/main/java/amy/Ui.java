@@ -1,3 +1,5 @@
+package amy;
+
 import java.util.Scanner;
 
 /**

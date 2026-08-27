@@ -1,3 +1,5 @@
+package amy.task;
+
 /**
  * Represents one task in Amy's in-memory task list.
  */

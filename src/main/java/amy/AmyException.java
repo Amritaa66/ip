@@ -1,3 +1,5 @@
+package amy;
+
 /**
  * Represents an input error reported by Amy.
  */

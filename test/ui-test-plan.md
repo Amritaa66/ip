@@ -1,6 +1,7 @@
 # Amy UI test plan
 
 > Run the automated cases from a temporary directory with `test/run-amy-isolated.sh`.
+> The packaged entry point is `amy.Amy` under the `src/main/java` source root.
 > The launcher gives every case a fresh save file; the manual check below verifies loading.
 
 ## Test case 1: Exit immediately

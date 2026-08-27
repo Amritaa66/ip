@@ -1,4 +1,7 @@
+package amy;
+
 import java.util.ArrayList;
+import amy.task.Task;
 
 /**
  * Stores Amy's tasks and provides operations for changing the collection.

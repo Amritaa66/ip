@@ -1,3 +1,5 @@
+package amy;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.AtomicMoveNotSupportedException;
@@ -5,6 +7,10 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import amy.task.Deadline;
+import amy.task.Event;
+import amy.task.Task;
+import amy.task.Todo;
 
 /**
  * Saves Amy's task list to a file on the hard disk.

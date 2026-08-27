@@ -1,3 +1,10 @@
+package amy;
+
+import amy.task.Deadline;
+import amy.task.Event;
+import amy.task.Task;
+import amy.task.Todo;
+
 /**
  * Interprets user commands and creates tasks from task commands.
  */
