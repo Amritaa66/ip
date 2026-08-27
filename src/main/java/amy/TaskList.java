@@ -1,6 +1,7 @@
 package amy;
 
 import java.util.ArrayList;
+
 import amy.task.Task;
 
 /**
@@ -23,22 +24,43 @@ public class TaskList {
         this(new ArrayList<>());
     }
 
-    public boolean isEmpty() { return tasks.isEmpty(); }
+    /** @return true when this list contains no tasks. */
+    public boolean isEmpty() {
+        return tasks.isEmpty();
+    }
 
-    public int size() { return tasks.size(); }
+    /** @return the number of tasks in this list. */
+    public int size() {
+        return tasks.size();
+    }
 
-    public Task get(int index) { return tasks.get(index); }
+    /** @return the task at the specified zero-based index. */
+    public Task get(int index) {
+        return tasks.get(index);
+    }
 
-    public void add(Task task) { tasks.add(task); }
+    /** Adds a task to the end of this list. */
+    public void add(Task task) {
+        tasks.add(task);
+    }
 
-    public Task remove(int index) { return tasks.remove(index); }
+    /** Removes and returns the task at the specified zero-based index. */
+    public Task remove(int index) {
+        return tasks.remove(index);
+    }
 
     /** Marks the task at the given zero-based index as done. */
-    public void mark(int index) { tasks.get(index).markAsDone(); }
+    public void mark(int index) {
+        tasks.get(index).markAsDone();
+    }
 
     /** Marks the task at the given zero-based index as not done. */
-    public void unmark(int index) { tasks.get(index).unmarkAsDone(); }
+    public void unmark(int index) {
+        tasks.get(index).unmarkAsDone();
+    }
 
     /** @return the current tasks for persistence */
-    public ArrayList<Task> asList() { return tasks; }
+    public ArrayList<Task> asList() {
+        return tasks;
+    }
 }
