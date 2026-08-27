@@ -24,4 +24,14 @@ public class Deadline extends Task {
     public String getDisplayText() {
         return description + " (by: " + by + ")";
     }
+
+    /**
+     * Returns the deadline text.
+     *
+     * @return the deadline text
+     */
+    public String getBy() {
+        return by;
+    }
+
 }
