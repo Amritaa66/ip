@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+
+import amy.task.Task;
 import amy.task.Todo;
 import org.junit.jupiter.api.Test;
 
@@ -17,6 +20,18 @@ class TaskListTest {
 
         assertTrue(taskList.isEmpty());
         assertEquals(0, taskList.size());
+    }
+
+    @Test
+    void taskListWithInitialTasks_containsThoseTasks() {
+        Todo task = new Todo("already stored");
+        ArrayList<Task> initialTasks = new ArrayList<>();
+        initialTasks.add(task);
+
+        TaskList taskList = new TaskList(initialTasks);
+
+        assertEquals(1, taskList.size());
+        assertEquals(task, taskList.get(0));
     }
 
     @Test
@@ -44,6 +59,23 @@ class TaskListTest {
     }
 
     @Test
+    void remove_middleTask_preservesOrderOfRemainingTasks() {
+        TaskList taskList = new TaskList();
+        Todo firstTask = new Todo("first");
+        Todo middleTask = new Todo("middle");
+        Todo lastTask = new Todo("last");
+        taskList.add(firstTask);
+        taskList.add(middleTask);
+        taskList.add(lastTask);
+
+        assertEquals(middleTask, taskList.remove(1));
+
+        assertEquals(2, taskList.size());
+        assertEquals(firstTask, taskList.get(0));
+        assertEquals(lastTask, taskList.get(1));
+    }
+
+    @Test
     void mark_taskBecomesDone() {
         TaskList taskList = new TaskList();
         taskList.add(new Todo("finish me"));
@@ -62,5 +94,17 @@ class TaskListTest {
         taskList.unmark(0);
 
         assertFalse(taskList.get(0).isDone());
+    }
+
+    @Test
+    void asList_returnsCurrentTasksForPersistence() {
+        TaskList taskList = new TaskList();
+        Todo task = new Todo("persist me");
+        taskList.add(task);
+
+        ArrayList<Task> persistedTasks = taskList.asList();
+
+        assertEquals(1, persistedTasks.size());
+        assertEquals(task, persistedTasks.get(0));
     }
 }
