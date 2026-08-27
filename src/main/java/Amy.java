@@ -22,11 +22,11 @@ public class Amy {
 
             if (normalizedCommand.equals("list")) {
                 if (tasks.isEmpty()) {
-                    System.out.println("There are no tasks in your list!");
+                    ui.showMessage("There are no tasks in your list!");
                 } else {
-                    System.out.println("Here are the tasks in your list:");
+                    ui.showMessage("Here are the tasks in your list:");
                     for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println((i + 1) + "." + tasks.get(i).getFullDisplayText());
+                        ui.showMessage((i + 1) + "." + tasks.get(i).getFullDisplayText());
                     }
                 }
             } else if (normalizedCommand.equals("mark")
@@ -40,8 +40,8 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.get(taskIndex).markAsDone();
                         saveTasks(storage, tasks.asList());
-                        System.out.println("Nice! I've marked this task as done:");
-                        System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
+                        ui.showMessage("Nice! I've marked this task as done:");
+                        ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
@@ -55,8 +55,8 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.get(taskIndex).unmarkAsDone();
                         saveTasks(storage, tasks.asList());
-                        System.out.println("OK, I've marked this task as not done yet:");
-                        System.out.println("  " + tasks.get(taskIndex).getFullDisplayText());
+                        ui.showMessage("OK, I've marked this task as not done yet:");
+                        ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
@@ -71,9 +71,9 @@ public class Amy {
                         Task deletedTask = tasks.get(taskIndex);
                         tasks.remove(taskIndex);
                         saveTasks(storage, tasks.asList());
-                        System.out.println("Noted. I've removed this task:");
-                        System.out.println("  " + deletedTask.getFullDisplayText());
-                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                        ui.showMessage("Noted. I've removed this task:");
+                        ui.showMessage("  " + deletedTask.getFullDisplayText());
+                        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
                     } else {
                         throw new AmyException("That task does not exist.");
                     }
@@ -85,9 +85,9 @@ public class Amy {
                 if (task != null) {
                     tasks.add(task);
                     saveTasks(storage, tasks.asList());
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("  " + task.getFullDisplayText());
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    ui.showMessage("Got it. I've added this task:");
+                    ui.showMessage("  " + task.getFullDisplayText());
+                    ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
                 } else if (normalizedCommand.startsWith("deadline ")) {
                     throw new AmyException("Please specify a deadline in the format: "
                             + "deadline <description> /by <date/time>.");
@@ -99,7 +99,7 @@ public class Amy {
                 throw new AmyException("I'm sorry, but I don't know what that means.");
             }
             } catch (AmyException exception) {
-                System.out.println(exception.getMessage());
+                ui.showMessage(exception.getMessage());
             }
 
             ui.showSeparator();

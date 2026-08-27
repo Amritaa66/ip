@@ -63,4 +63,13 @@ public class Ui {
         System.out.println("Bye. Hope to see you again soon!");
         showSeparator();
     }
+
+    /**
+     * Displays a message to the user.
+     *
+     * @param message the message to display
+     */
+    public void showMessage(String message) {
+        System.out.println(message);
+    }
 }
