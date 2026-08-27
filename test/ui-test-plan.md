@@ -876,3 +876,32 @@ containing ` | ` is preserved after a restart.
 types, and incomplete deadline/event records alongside a valid task. Confirm `list` shows only the
 valid task. Then add a task whose description contains ` | `, restart Amy, and confirm `list`
 shows the original description unchanged.
+
+## Test case 24: List with no tasks
+
+**Aim:** Confirm Amy explains that the list is empty on a first run without a data file.
+
+**Inputs:**
+```text
+list
+bye
+```
+
+**Expected output:**
+```text
+________________________________________________________________________________
+  A     m   m  y   y
+ A A    mm mm   y y
+AAAAA   m m m    y
+A   A   m   m    y
+A   A   m   m    y
+Hello! I'm Amy.
+What can I do for you?
+________________________________________________________________________________
+________________________________________________________________________________
+There are no tasks in your list!
+________________________________________________________________________________
+________________________________________________________________________________
+Bye. Hope to see you again soon!
+________________________________________________________________________________
+```

@@ -32,9 +32,13 @@ public class Amy {
             }
 
             if (normalizedCommand.equals("list")) {
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    System.out.println((i + 1) + "." + tasks.get(i).getFullDisplayText());
+                if (tasks.isEmpty()) {
+                    System.out.println("There are no tasks in your list!");
+                } else {
+                    System.out.println("Here are the tasks in your list:");
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + "." + tasks.get(i).getFullDisplayText());
+                    }
                 }
             } else if (normalizedCommand.equals("mark")
                     || normalizedCommand.equals("unmark")
