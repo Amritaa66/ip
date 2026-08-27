@@ -2,13 +2,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Amy {
-    public static void main(String[] args) {
-        Ui ui = new Ui();
-        Parser parser = new Parser();
-        Storage storage = new Storage("data/amy.txt");
-        ui.showWelcome();
+    private final Ui ui;
+    private final Parser parser;
+    private final Storage storage;
+    private final TaskList tasks;
 
-        TaskList tasks = new TaskList(loadTasks(storage));
+    /**
+     * Creates Amy with tasks loaded from the specified file.
+     *
+     * @param filePath path of the task save file
+     */
+    public Amy(String filePath) {
+        ui = new Ui();
+        parser = new Parser();
+        storage = new Storage(filePath);
+        tasks = new TaskList(loadTasks());
+    }
+
+    /** Runs Amy's command loop. */
+    public void run() {
+        ui.showWelcome();
         while (ui.hasNextCommand()) {
             String command = ui.readCommand();
             String normalizedCommand = command.trim();
@@ -39,7 +52,7 @@ public class Amy {
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.mark(taskIndex);
-                        saveTasks(storage, tasks.asList());
+                        saveTasks(tasks.asList());
                         ui.showMessage("Nice! I've marked this task as done:");
                         ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
@@ -54,7 +67,7 @@ public class Amy {
                     int taskIndex = taskNumber - 1;
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         tasks.unmark(taskIndex);
-                        saveTasks(storage, tasks.asList());
+                        saveTasks(tasks.asList());
                         ui.showMessage("OK, I've marked this task as not done yet:");
                         ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
                     } else {
@@ -70,7 +83,7 @@ public class Amy {
                     if (taskIndex >= 0 && taskIndex < tasks.size()) {
                         Task deletedTask = tasks.get(taskIndex);
                         tasks.remove(taskIndex);
-                        saveTasks(storage, tasks.asList());
+                        saveTasks(tasks.asList());
                         ui.showMessage("Noted. I've removed this task:");
                         ui.showMessage("  " + deletedTask.getFullDisplayText());
                         ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
@@ -84,7 +97,7 @@ public class Amy {
                 Task task = parser.createTask(normalizedCommand, command);
                 if (task != null) {
                     tasks.add(task);
-                    saveTasks(storage, tasks.asList());
+                    saveTasks(tasks.asList());
                     ui.showMessage("Got it. I've added this task:");
                     ui.showMessage("  " + task.getFullDisplayText());
                     ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
@@ -111,7 +124,7 @@ public class Amy {
      *
      * @param tasks the current task list
      */
-    private static void saveTasks(Storage storage, ArrayList<Task> tasks) {
+    private void saveTasks(ArrayList<Task> tasks) {
         try {
             storage.save(tasks);
         } catch (IOException | SecurityException exception) {
@@ -124,13 +137,17 @@ public class Amy {
      *
      * @return the tasks loaded from the hard disk
      */
-    private static ArrayList<Task> loadTasks(Storage storage) {
+    private ArrayList<Task> loadTasks() {
         try {
             return storage.load();
         } catch (IOException | SecurityException exception) {
             System.out.println("Unable to load tasks from the hard disk.");
             return new ArrayList<>();
         }
+    }
+
+    public static void main(String[] args) {
+        new Amy("data/amy.txt").run();
     }
 
 }
