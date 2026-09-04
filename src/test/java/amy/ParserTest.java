@@ -5,11 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
+
 import amy.task.Deadline;
 import amy.task.Event;
 import amy.task.Task;
 import amy.task.Todo;
-import org.junit.jupiter.api.Test;
 
 /** Tests the command recognition and task construction logic in {@link Parser}. */
 class ParserTest {
