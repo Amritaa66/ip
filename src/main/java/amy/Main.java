@@ -24,7 +24,7 @@ import javafx.scene.layout.Region;
 
         private Image userImage = new Image(this.getClass().getResourceAsStream("/images/img.png"));
         private Image amyImage = new Image(this.getClass().getResourceAsStream("/images/img_1.png"));
-
+        private Amy amy = new Amy("data/amy.txt");
 
         @Override
         public void start(Stage stage) {
@@ -54,7 +54,7 @@ import javafx.scene.layout.Region;
 
             //Formatting the window to look as expected
 
-            stage.setTitle("Duke");
+            stage.setTitle("Amy");
             stage.setResizable(false);
             stage.setMinHeight(600.0);
             stage.setMinWidth(400.0);
@@ -101,7 +101,12 @@ import javafx.scene.layout.Region;
          * the dialog container. Clears the user input after processing.
          */
         private void handleUserInput() {
-            dialogContainer.getChildren().addAll(new DialogBox(userInput.getText(), userImage));
+            String userText = userInput.getText();
+            String dukeText = amy.getResponse(userInput.getText());
+            dialogContainer.getChildren().addAll(
+                    new DialogBox(userText, userImage),
+                    new DialogBox(dukeText, amyImage)
+            );
             userInput.clear();
         }
     }

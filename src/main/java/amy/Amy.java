@@ -180,4 +180,11 @@ public class Amy {
         new Amy("data/amy.txt").run();
     }
 
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "Amy heard: " + input;
+    }
+
 }
