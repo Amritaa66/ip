@@ -104,8 +104,8 @@ import javafx.scene.layout.Region;
             String userText = userInput.getText();
             String dukeText = amy.getResponse(userInput.getText());
             dialogContainer.getChildren().addAll(
-                    new DialogBox(userText, userImage),
-                    new DialogBox(dukeText, amyImage)
+                    DialogBox.getUserDialog(userText, userImage),
+                    DialogBox.getDukeDialog(dukeText, amyImage)
             );
             userInput.clear();
         }
