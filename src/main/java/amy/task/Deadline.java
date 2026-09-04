@@ -7,14 +7,13 @@ import java.time.format.DateTimeFormatter;
  * Represents a task that must be completed by a specified date and time.
  */
 public class Deadline extends Task {
-    protected LocalDateTime by;
-
     public static final DateTimeFormatter INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    public static final DateTimeFormatter SAVE_FORMAT =
             DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
-    public static final DateTimeFormatter SAVE_FORMAT =
-            DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    protected LocalDateTime by;
 
     /**
      * Creates an incomplete deadline.

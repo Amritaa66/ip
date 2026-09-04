@@ -6,9 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 
+import org.junit.jupiter.api.Test;
+
 import amy.task.Task;
 import amy.task.Todo;
-import org.junit.jupiter.api.Test;
 
 /**
  * Tests the collection and task-state operations provided by {@link TaskList}.
