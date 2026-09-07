@@ -17,6 +17,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         try {
+            stage.setMinHeight(220);
+            stage.setMinWidth(417);
+            stage.setMaxWidth(417); // Add this if you didn't automatically resize elements
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
