@@ -1,25 +1,30 @@
 .root {
-    main-color: rgb(237, 255, 242);       /* Create a looked-up color called "main-color" within root. */
+    main-color: #dceeff;
+    accent-blue: #4a90e2;
+    send-brown: #9a6a4a;
+    -fx-font-family: "Arial";
     -fx-background-color: main-color;
 }
 
 .text-field {
-    -fx-background-color: #d9ffe2;
+    -fx-background-color: #c6e3fa;
     -fx-font: 20px "Arial";
+    -fx-text-fill: #263746;
 }
 
 .button {
-    -fx-background-color: mediumspringgreen;
+    -fx-background-color: send-brown;
+    -fx-text-fill: white;
     -fx-font: italic bold 16px "Arial";
 }
 
 .button:hover {
-    -fx-background-color:cyan;
+    -fx-background-color: #b9825d;
     -fx-font-size: 18px;
 }
 
 .button:pressed {
-    -fx-background-color:orange;
+    -fx-background-color: #7a5038;
     -fx-font-size: 20px;
 }
 
@@ -29,12 +34,12 @@
 }
 
 .scroll-bar {
-    -fx-font-size: 10px;  /* Change width of scroll bar. */
+    -fx-font-size: 10px;
     -fx-background-color: main-color;
 }
 
 .scroll-bar .thumb {
-    -fx-background-color: #ff9cb4;
+    -fx-background-color: accent-blue;
     -fx-background-radius: 1em;
 }
 
@@ -44,4 +49,3 @@
     -fx-pref-height: 0;
     -fx-opacity: 0;
 }
-

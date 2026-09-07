@@ -182,9 +182,93 @@ public class Amy {
 
     /**
      * Generates a response for the user's chat message.
+     *
+     * @param input command entered through the graphical interface
+     * @return response to display in the chat window
      */
     public String getResponse(String input) {
-        return "Amy heard: " + input;
+        String command = input.trim();
+        if (command.equals("bye")) {
+            return "Bye. Hope to see you again soon!";
+        }
+
+        try {
+            if (command.equals("list")) {
+                if (tasks.isEmpty()) {
+                    return "There are no tasks in your list!";
+                }
+                StringBuilder response = new StringBuilder("Here are the tasks in your list:");
+                for (int i = 0; i < tasks.size(); i++) {
+                    response.append("\n").append(i + 1).append(".")
+                            .append(tasks.get(i).getFullDisplayText());
+                }
+                return response.toString();
+            }
+
+            if (command.equals("find") || command.equals("mark")
+                    || command.equals("unmark") || command.equals("delete")) {
+                return command.equals("find") ? "Please provide a keyword."
+                        : "Please provide a task number.";
+            }
+
+            if (command.startsWith("find ")) {
+                String keyword = command.substring(5).trim().toLowerCase(Locale.ROOT);
+                StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
+                boolean foundMatch = false;
+                for (int i = 0; i < tasks.size(); i++) {
+                    if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(keyword)) {
+                        response.append("\n").append(i + 1).append(".")
+                                .append(tasks.get(i).getFullDisplayText());
+                        foundMatch = true;
+                    }
+                }
+                return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+            }
+
+            if (command.startsWith("mark ") || command.startsWith("unmark ")
+                    || command.startsWith("delete ")) {
+                String[] parts = command.split(" ", 2);
+                int taskIndex = Integer.parseInt(parts[1].trim()) - 1;
+                if (taskIndex < 0 || taskIndex >= tasks.size()) {
+                    return "That task does not exist.";
+                }
+                if (parts[0].equals("delete")) {
+                    Task deletedTask = tasks.get(taskIndex);
+                    tasks.remove(taskIndex);
+                    saveTasks(tasks.asList());
+                    return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
+                            + "\nNow you have " + tasks.size() + " tasks in the list.";
+                }
+                if (parts[0].equals("mark")) {
+                    tasks.mark(taskIndex);
+                    saveTasks(tasks.asList());
+                    return "Nice! I've marked this task as done:\n  "
+                            + tasks.get(taskIndex).getFullDisplayText();
+                }
+                tasks.unmark(taskIndex);
+                saveTasks(tasks.asList());
+                return "OK, I've marked this task as not done yet:\n  "
+                        + tasks.get(taskIndex).getFullDisplayText();
+            }
+
+            if (parser.isTaskCommand(command)) {
+                Task task = parser.createTask(command, input);
+                if (task == null) {
+                    return command.startsWith("deadline ")
+                            ? "Please specify a deadline in the format: deadline <description> /by <date/time>."
+                            : "Please specify an event in the format: event <description> /from <start> /to <end>.";
+                }
+                tasks.add(task);
+                saveTasks(tasks.asList());
+                return "Got it. I've added this task:\n  " + task.getFullDisplayText()
+                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+            }
+        } catch (NumberFormatException exception) {
+            return "Please specify a valid task number.";
+        } catch (AmyException exception) {
+            return exception.getMessage();
+        }
+        return "I'm sorry, but I don't know what that means.";
     }
 
 }
