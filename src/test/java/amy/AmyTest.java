@@ -55,6 +55,17 @@ class AmyTest {
         assertEquals("There are no tasks in your list!", amy.getResponse("list"));
     }
 
+    @Test
+    void undo_afterRestartHasNoHistoryButSavedTasksRemain() {
+        Amy amy = createAmy();
+        amy.getResponse("todo persistent task");
+
+        Amy restartedAmy = createAmy();
+
+        assertEquals("There is no command to undo.", restartedAmy.getResponse("undo"));
+        assertEquals("1.[T][ ] persistent task", restartedAmy.getResponse("list").split("\\n")[1]);
+    }
+
     private Amy createAmy() {
         return new Amy(temporaryDirectory.resolve("amy.txt").toString());
     }
