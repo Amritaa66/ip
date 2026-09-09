@@ -153,16 +153,7 @@ public class Amy {
             }
 
             if (parser.isTaskCommand(command)) {
-                Task task = parser.createTask(command, input);
-                if (task == null) {
-                    return command.startsWith("deadline ")
-                            ? "Please specify a deadline in the format: deadline <description> /by <date/time>."
-                            : "Please specify an event in the format: event <description> /from <start> /to <end>.";
-                }
-                tasks.add(task);
-                saveTasks(tasks.asList());
-                return "Got it. I've added this task:\n  " + task.getFullDisplayText()
-                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+                return addTask(command, input);
             }
         } catch (NumberFormatException exception) {
             return "Please specify a valid task number.";
@@ -170,6 +161,27 @@ public class Amy {
             return exception.getMessage();
         }
         return "I'm sorry, but I don't know what that means.";
+    }
+
+    /**
+     * Creates and persists a task from a task command.
+     *
+     * @param command trimmed task command
+     * @param input original user input
+     * @return response describing the created task or the validation error
+     * @throws AmyException when the task command contains invalid data
+     */
+    private String addTask(String command, String input) throws AmyException {
+        Task task = parser.createTask(command, input);
+        if (task == null) {
+            return command.startsWith("deadline ")
+                    ? "Please specify a deadline in the format: deadline <description> /by <date/time>."
+                    : "Please specify an event in the format: event <description> /from <start> /to <end>.";
+        }
+        tasks.add(task);
+        saveTasks(tasks.asList());
+        return "Got it. I've added this task:\n  " + task.getFullDisplayText()
+                + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
 }
