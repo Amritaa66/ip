@@ -80,7 +80,7 @@ public class Amy {
      * @param args command-line arguments, which are not used
      */
     public static void main(String[] args) {
-        new Amy("data/amy.txt").run();
+        new Amy(Storage.getDefaultSavePath()).run();
     }
 
     /**

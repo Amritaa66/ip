@@ -7,6 +7,8 @@ asks for confirmation before applying the undo. Reply with `y` or `yes` to
 confirm, or `n` or `no` to cancel. Undo history is kept for the current
 session only.
 
+Amy stores tasks for both the console and GUI versions in `~/.amy/amy.txt`.
+
 For clarity, the confirmation prompt includes the complete task details:
 
 ```text

@@ -19,6 +19,8 @@ for confirmation before changing the task list. Reply with `y` or `yes` to
 confirm, or `n` or `no` to cancel. Undo history is kept for the current session
 only.
 
+Amy stores tasks for both the console and GUI versions in `~/.amy/amy.txt`.
+
 The confirmation prompt includes the task type, completion status, and full
 task details, for example:
 
