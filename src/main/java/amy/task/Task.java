@@ -13,6 +13,8 @@ public class Task {
      * @param description the text describing the task
      */
     public Task(String description) {
+        // Every task needs text because descriptions are used in display and persistence.
+        assert description != null && !description.isBlank() : "Task description must not be blank";
         this.description = description;
         this.isDone = false;
     }

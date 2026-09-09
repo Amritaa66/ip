@@ -187,6 +187,8 @@ public class Amy {
      * @return response to display in the chat window
      */
     public String getResponse(String input) {
+        // GUI commands originate from the text field and must be represented by a string.
+        assert input != null : "GUI command input must not be null";
         String command = input.trim();
         if (command.equals("bye")) {
             return "Bye. Hope to see you again soon!";
