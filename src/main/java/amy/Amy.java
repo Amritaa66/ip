@@ -32,113 +32,14 @@ public class Amy {
         ui.showWelcome();
         while (ui.hasNextCommand()) {
             String command = ui.readCommand();
-            String normalizedCommand = command.trim();
             ui.showSeparator();
 
-            try {
-            if (normalizedCommand.equals("bye")) {
+            if (command.trim().equals("bye")) {
                 ui.showFarewell();
                 break;
             }
 
-            if (normalizedCommand.equals("find")) {
-                throw new AmyException("Please provide a keyword.");
-            } else if (normalizedCommand.startsWith("find ")) {
-                String keyword = normalizedCommand.substring(5).trim().toLowerCase(Locale.ROOT);
-                boolean foundMatch = false;
-                for (int i = 0; i < tasks.size(); i++) {
-                    if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(keyword)) {
-                        if (!foundMatch) {
-                            ui.showMessage("Here are the matching tasks in your list:");
-                            foundMatch = true;
-                        }
-                        ui.showMessage((i + 1) + "." + tasks.get(i).getFullDisplayText());
-                    }
-                }
-                if (!foundMatch) {
-                    ui.showMessage("There are no matching tasks in your list!");
-                }
-            } else if (normalizedCommand.equals("list")) {
-                if (tasks.isEmpty()) {
-                    ui.showMessage("There are no tasks in your list!");
-                } else {
-                    ui.showMessage("Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        ui.showMessage((i + 1) + "." + tasks.get(i).getFullDisplayText());
-                    }
-                }
-            } else if (normalizedCommand.equals("mark")
-                    || normalizedCommand.equals("unmark")
-                    || normalizedCommand.equals("delete")) {
-                throw new AmyException("Please provide a task number.");
-            } else if (normalizedCommand.startsWith("mark ")) {
-                try {
-                    int taskNumber = Integer.parseInt(normalizedCommand.substring(5).trim());
-                    int taskIndex = taskNumber - 1;
-                    if (taskIndex >= 0 && taskIndex < tasks.size()) {
-                        tasks.mark(taskIndex);
-                        saveTasks(tasks.asList());
-                        ui.showMessage("Nice! I've marked this task as done:");
-                        ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
-                    } else {
-                        throw new AmyException("That task does not exist.");
-                    }
-                } catch (NumberFormatException ignored) {
-                    throw new AmyException("Please specify a valid task number.");
-                }
-            } else if (normalizedCommand.startsWith("unmark ")) {
-                try {
-                    int taskNumber = Integer.parseInt(normalizedCommand.substring(7).trim());
-                    int taskIndex = taskNumber - 1;
-                    if (taskIndex >= 0 && taskIndex < tasks.size()) {
-                        tasks.unmark(taskIndex);
-                        saveTasks(tasks.asList());
-                        ui.showMessage("OK, I've marked this task as not done yet:");
-                        ui.showMessage("  " + tasks.get(taskIndex).getFullDisplayText());
-                    } else {
-                        throw new AmyException("That task does not exist.");
-                    }
-                } catch (NumberFormatException ignored) {
-                    throw new AmyException("Please specify a valid task number.");
-                }
-            } else if (normalizedCommand.startsWith("delete ")) {
-                try {
-                    int taskNumber = Integer.parseInt(normalizedCommand.substring(7).trim());
-                    int taskIndex = taskNumber - 1;
-                    if (taskIndex >= 0 && taskIndex < tasks.size()) {
-                        Task deletedTask = tasks.get(taskIndex);
-                        tasks.remove(taskIndex);
-                        saveTasks(tasks.asList());
-                        ui.showMessage("Noted. I've removed this task:");
-                        ui.showMessage("  " + deletedTask.getFullDisplayText());
-                        ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
-                    } else {
-                        throw new AmyException("That task does not exist.");
-                    }
-                } catch (NumberFormatException ignored) {
-                    throw new AmyException("Please specify a valid task number.");
-                }
-            } else if (parser.isTaskCommand(normalizedCommand)) {
-                Task task = parser.createTask(normalizedCommand, command);
-                if (task != null) {
-                    tasks.add(task);
-                    saveTasks(tasks.asList());
-                    ui.showMessage("Got it. I've added this task:");
-                    ui.showMessage("  " + task.getFullDisplayText());
-                    ui.showMessage("Now you have " + tasks.size() + " tasks in the list.");
-                } else if (normalizedCommand.startsWith("deadline ")) {
-                    throw new AmyException("Please specify a deadline in the format: "
-                            + "deadline <description> /by <date/time>.");
-                } else {
-                    throw new AmyException("Please specify an event in the format: "
-                            + "event <description> /from <start> /to <end>.");
-                }
-            } else if (!parser.isTaskCommand(normalizedCommand)) {
-                throw new AmyException("I'm sorry, but I don't know what that means.");
-            }
-            } catch (AmyException exception) {
-                ui.showMessage(exception.getMessage());
-            }
+            ui.showMessage(getResponse(command));
 
             ui.showSeparator();
         }
@@ -196,15 +97,7 @@ public class Amy {
 
         try {
             if (command.equals("list")) {
-                if (tasks.isEmpty()) {
-                    return "There are no tasks in your list!";
-                }
-                StringBuilder response = new StringBuilder("Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    response.append("\n").append(i + 1).append(".")
-                            .append(tasks.get(i).getFullDisplayText());
-                }
-                return response.toString();
+                return getListResponse();
             }
 
             if (command.equals("find") || command.equals("mark")
@@ -214,56 +107,16 @@ public class Amy {
             }
 
             if (command.startsWith("find ")) {
-                String keyword = command.substring(5).trim().toLowerCase(Locale.ROOT);
-                StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
-                boolean foundMatch = false;
-                for (int i = 0; i < tasks.size(); i++) {
-                    if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(keyword)) {
-                        response.append("\n").append(i + 1).append(".")
-                                .append(tasks.get(i).getFullDisplayText());
-                        foundMatch = true;
-                    }
-                }
-                return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+                return getFindResponse(command.substring(5).trim());
             }
 
             if (command.startsWith("mark ") || command.startsWith("unmark ")
                     || command.startsWith("delete ")) {
-                String[] parts = command.split(" ", 2);
-                int taskIndex = Integer.parseInt(parts[1].trim()) - 1;
-                if (taskIndex < 0 || taskIndex >= tasks.size()) {
-                    return "That task does not exist.";
-                }
-                if (parts[0].equals("delete")) {
-                    Task deletedTask = tasks.get(taskIndex);
-                    tasks.remove(taskIndex);
-                    saveTasks(tasks.asList());
-                    return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
-                            + "\nNow you have " + tasks.size() + " tasks in the list.";
-                }
-                if (parts[0].equals("mark")) {
-                    tasks.mark(taskIndex);
-                    saveTasks(tasks.asList());
-                    return "Nice! I've marked this task as done:\n  "
-                            + tasks.get(taskIndex).getFullDisplayText();
-                }
-                tasks.unmark(taskIndex);
-                saveTasks(tasks.asList());
-                return "OK, I've marked this task as not done yet:\n  "
-                        + tasks.get(taskIndex).getFullDisplayText();
+                return updateTask(command);
             }
 
             if (parser.isTaskCommand(command)) {
-                Task task = parser.createTask(command, input);
-                if (task == null) {
-                    return command.startsWith("deadline ")
-                            ? "Please specify a deadline in the format: deadline <description> /by <date/time>."
-                            : "Please specify an event in the format: event <description> /from <start> /to <end>.";
-                }
-                tasks.add(task);
-                saveTasks(tasks.asList());
-                return "Got it. I've added this task:\n  " + task.getFullDisplayText()
-                        + "\nNow you have " + tasks.size() + " tasks in the list.";
+                return addTask(command, input);
             }
         } catch (NumberFormatException exception) {
             return "Please specify a valid task number.";
@@ -271,6 +124,77 @@ public class Amy {
             return exception.getMessage();
         }
         return "I'm sorry, but I don't know what that means.";
+    }
+
+    /** Returns the response for a list command. */
+    private String getListResponse() {
+        if (tasks.isEmpty()) {
+            return "There are no tasks in your list!";
+        }
+        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            response.append("\n").append(i + 1).append(".").append(tasks.get(i).getFullDisplayText());
+        }
+        return response.toString();
+    }
+
+    /** Returns the response for a find command. */
+    private String getFindResponse(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
+        boolean foundMatch = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                response.append("\n").append(i + 1).append(".").append(tasks.get(i).getFullDisplayText());
+                foundMatch = true;
+            }
+        }
+        return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+    }
+
+    /** Updates a task's completion state or removes it. */
+    private String updateTask(String command) {
+        String[] parts = command.split(" ", 2);
+        int taskIndex = Integer.parseInt(parts[1].trim()) - 1;
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
+            return "That task does not exist.";
+        }
+        if (parts[0].equals("delete")) {
+            Task deletedTask = tasks.get(taskIndex);
+            tasks.remove(taskIndex);
+            saveTasks(tasks.asList());
+            return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
+                    + "\nNow you have " + tasks.size() + " tasks in the list.";
+        }
+        if (parts[0].equals("mark")) {
+            tasks.mark(taskIndex);
+            saveTasks(tasks.asList());
+            return "Nice! I've marked this task as done:\n  " + tasks.get(taskIndex).getFullDisplayText();
+        }
+        tasks.unmark(taskIndex);
+        saveTasks(tasks.asList());
+        return "OK, I've marked this task as not done yet:\n  " + tasks.get(taskIndex).getFullDisplayText();
+    }
+
+    /**
+     * Creates and persists a task from a task command.
+     *
+     * @param command trimmed task command
+     * @param input original user input
+     * @return response describing the created task or the validation error
+     * @throws AmyException when the task command contains invalid data
+     */
+    private String addTask(String command, String input) throws AmyException {
+        Task task = parser.createTask(command, input);
+        if (task == null) {
+            return command.startsWith("deadline ")
+                    ? "Please specify a deadline in the format: deadline <description> /by <date/time>."
+                    : "Please specify an event in the format: event <description> /from <start> /to <end>.";
+        }
+        tasks.add(task);
+        saveTasks(tasks.asList());
+        return "Got it. I've added this task:\n  " + task.getFullDisplayText()
+                + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
 }
