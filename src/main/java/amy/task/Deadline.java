@@ -2,6 +2,10 @@ package amy.task;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Represents a task that must be completed by a specified date and time.
@@ -11,8 +15,10 @@ public class Deadline extends Task {
             DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     public static final DateTimeFormatter SAVE_FORMAT =
             DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
-    private static final DateTimeFormatter OUTPUT_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
+    private static final DateTimeFormatter OUTPUT_FORMAT = new DateTimeFormatterBuilder()
+            .appendPattern("MMM d yyyy, h:mm")
+            .appendText(ChronoField.AMPM_OF_DAY, Map.of(0L, "am", 1L, "pm"))
+            .toFormatter(Locale.ENGLISH);
     protected LocalDateTime by;
 
     /**
