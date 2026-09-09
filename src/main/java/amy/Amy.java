@@ -95,15 +95,7 @@ public class Amy {
 
         try {
             if (command.equals("list")) {
-                if (tasks.isEmpty()) {
-                    return "There are no tasks in your list!";
-                }
-                StringBuilder response = new StringBuilder("Here are the tasks in your list:");
-                for (int i = 0; i < tasks.size(); i++) {
-                    response.append("\n").append(i + 1).append(".")
-                            .append(tasks.get(i).getFullDisplayText());
-                }
-                return response.toString();
+                return getListResponse();
             }
 
             if (command.equals("find") || command.equals("mark")
@@ -113,43 +105,12 @@ public class Amy {
             }
 
             if (command.startsWith("find ")) {
-                String keyword = command.substring(5).trim().toLowerCase(Locale.ROOT);
-                StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
-                boolean foundMatch = false;
-                for (int i = 0; i < tasks.size(); i++) {
-                    if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(keyword)) {
-                        response.append("\n").append(i + 1).append(".")
-                                .append(tasks.get(i).getFullDisplayText());
-                        foundMatch = true;
-                    }
-                }
-                return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+                return getFindResponse(command.substring(5).trim());
             }
 
             if (command.startsWith("mark ") || command.startsWith("unmark ")
                     || command.startsWith("delete ")) {
-                String[] parts = command.split(" ", 2);
-                int taskIndex = Integer.parseInt(parts[1].trim()) - 1;
-                if (taskIndex < 0 || taskIndex >= tasks.size()) {
-                    return "That task does not exist.";
-                }
-                if (parts[0].equals("delete")) {
-                    Task deletedTask = tasks.get(taskIndex);
-                    tasks.remove(taskIndex);
-                    saveTasks(tasks.asList());
-                    return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
-                            + "\nNow you have " + tasks.size() + " tasks in the list.";
-                }
-                if (parts[0].equals("mark")) {
-                    tasks.mark(taskIndex);
-                    saveTasks(tasks.asList());
-                    return "Nice! I've marked this task as done:\n  "
-                            + tasks.get(taskIndex).getFullDisplayText();
-                }
-                tasks.unmark(taskIndex);
-                saveTasks(tasks.asList());
-                return "OK, I've marked this task as not done yet:\n  "
-                        + tasks.get(taskIndex).getFullDisplayText();
+                return updateTask(command);
             }
 
             if (parser.isTaskCommand(command)) {
@@ -161,6 +122,56 @@ public class Amy {
             return exception.getMessage();
         }
         return "I'm sorry, but I don't know what that means.";
+    }
+
+    /** Returns the response for a list command. */
+    private String getListResponse() {
+        if (tasks.isEmpty()) {
+            return "There are no tasks in your list!";
+        }
+        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            response.append("\n").append(i + 1).append(".").append(tasks.get(i).getFullDisplayText());
+        }
+        return response.toString();
+    }
+
+    /** Returns the response for a find command. */
+    private String getFindResponse(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
+        boolean foundMatch = false;
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword)) {
+                response.append("\n").append(i + 1).append(".").append(tasks.get(i).getFullDisplayText());
+                foundMatch = true;
+            }
+        }
+        return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+    }
+
+    /** Updates a task's completion state or removes it. */
+    private String updateTask(String command) {
+        String[] parts = command.split(" ", 2);
+        int taskIndex = Integer.parseInt(parts[1].trim()) - 1;
+        if (taskIndex < 0 || taskIndex >= tasks.size()) {
+            return "That task does not exist.";
+        }
+        if (parts[0].equals("delete")) {
+            Task deletedTask = tasks.get(taskIndex);
+            tasks.remove(taskIndex);
+            saveTasks(tasks.asList());
+            return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
+                    + "\nNow you have " + tasks.size() + " tasks in the list.";
+        }
+        if (parts[0].equals("mark")) {
+            tasks.mark(taskIndex);
+            saveTasks(tasks.asList());
+            return "Nice! I've marked this task as done:\n  " + tasks.get(taskIndex).getFullDisplayText();
+        }
+        tasks.unmark(taskIndex);
+        saveTasks(tasks.asList());
+        return "OK, I've marked this task as not done yet:\n  " + tasks.get(taskIndex).getFullDisplayText();
     }
 
     /**
