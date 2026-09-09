@@ -12,7 +12,7 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
-    private Amy amy = new Amy("data/amy.txt");
+    private final Amy amy = new Amy(Storage.getDefaultSavePath());
 
     @Override
     public void start(Stage stage) {
@@ -31,6 +31,5 @@ public class Main extends Application {
         }
     }
 }
-
 
 

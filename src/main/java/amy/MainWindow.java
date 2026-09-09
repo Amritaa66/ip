@@ -33,6 +33,10 @@ public class MainWindow extends AnchorPane {
     /** Injects the Duke instance */
     public void setAmy(Amy a) {
         amy = a;
+        String savedTasks = amy.getResponse("list");
+        if (!savedTasks.equals("There are no tasks in your list!")) {
+            dialogContainer.getChildren().add(DialogBox.getDukeDialog(savedTasks, amyImage));
+        }
     }
 
     /**

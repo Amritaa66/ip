@@ -19,6 +19,8 @@ import amy.task.Todo;
  * Saves Amy's task list to a file on the hard disk.
  */
 public class Storage {
+    private static final String DEFAULT_DIRECTORY = ".amy";
+    private static final String DEFAULT_FILE_NAME = "amy.txt";
     private final Path saveFile;
 
     /**
@@ -28,6 +30,15 @@ public class Storage {
      */
     public Storage(String filePath) {
         saveFile = Path.of(filePath);
+    }
+
+    /**
+     * Returns the save path shared by GUI launches from different working directories.
+     *
+     * @return the user's persistent Amy save path
+     */
+    public static String getDefaultSavePath() {
+        return Path.of(System.getProperty("user.home"), DEFAULT_DIRECTORY, DEFAULT_FILE_NAME).toString();
     }
 
     /**
