@@ -1,5 +1,12 @@
 # Amy project template
 
+## Undoing a command
+
+Enter `undo` to undo the most recent successful task-changing command. Amy
+asks for confirmation before applying the undo. Reply with `y` or `yes` to
+confirm, or `n` or `no` to cancel. Undo history is kept for the current
+session only.
+
 This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
 
 ## Setting up in Intellij

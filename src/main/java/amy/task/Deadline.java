@@ -16,7 +16,12 @@ public class Deadline extends Task {
     public static final DateTimeFormatter SAVE_FORMAT =
             DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
     private static final DateTimeFormatter OUTPUT_FORMAT = new DateTimeFormatterBuilder()
-            .appendPattern("MMM d yyyy, h:mm")
+            .appendText(ChronoField.MONTH_OF_YEAR, Map.ofEntries(
+                    Map.entry(1L, "Jan"), Map.entry(2L, "Feb"), Map.entry(3L, "Mar"),
+                    Map.entry(4L, "Apr"), Map.entry(5L, "May"), Map.entry(6L, "Jun"),
+                    Map.entry(7L, "Jul"), Map.entry(8L, "Aug"), Map.entry(9L, "Sept"),
+                    Map.entry(10L, "Oct"), Map.entry(11L, "Nov"), Map.entry(12L, "Dec")))
+            .appendPattern(" d yyyy, h:mm")
             .appendText(ChronoField.AMPM_OF_DAY, Map.of(0L, "am", 1L, "pm"))
             .toFormatter(Locale.ENGLISH);
     protected LocalDateTime by;
@@ -49,5 +54,14 @@ public class Deadline extends Task {
      */
     public LocalDateTime getBy() {
         return by;
+    }
+
+    @Override
+    public Task copy() {
+        Deadline copy = new Deadline(description, by.format(INPUT_FORMAT));
+        if (isDone) {
+            copy.markAsDone();
+        }
+        return copy;
     }
 }

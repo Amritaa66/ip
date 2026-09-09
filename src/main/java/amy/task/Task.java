@@ -87,4 +87,13 @@ public class Task {
         return "[" + getTypeIcon() + "][" + getStatusIcon() + "] " + getDisplayText();
     }
 
+    /** Creates a copy of this task, preserving its completion state. */
+    public Task copy() {
+        Task copy = new Task(description);
+        if (isDone) {
+            copy.markAsDone();
+        }
+        return copy;
+    }
+
 }

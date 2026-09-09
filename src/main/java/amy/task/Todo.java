@@ -8,4 +8,13 @@ public class Todo extends Task {
     public Todo(String description) {
         super(description);
     }
+
+    @Override
+    public Task copy() {
+        Todo copy = new Todo(description);
+        if (isDone) {
+            copy.markAsDone();
+        }
+        return copy;
+    }
 }

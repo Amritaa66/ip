@@ -12,6 +12,13 @@
 
 // Give examples of usage
 
+## Undoing a command
+
+Use `undo` to undo the most recent successful task-changing command. Amy asks
+for confirmation before changing the task list. Reply with `y` or `yes` to
+confirm, or `n` or `no` to cancel. Undo history is kept for the current session
+only.
+
 Example: `keyword (optional arguments)`
 
 // A description of the expected outcome goes here

@@ -101,4 +101,12 @@ public class TaskList {
     public ArrayList<Task> asList() {
         return tasks;
     }
+
+    /** Replaces the current tasks with a copied snapshot. */
+    public void restore(ArrayList<Task> snapshot) {
+        tasks.clear();
+        for (Task task : snapshot) {
+            tasks.add(task.copy());
+        }
+    }
 }
