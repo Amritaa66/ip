@@ -19,6 +19,13 @@ for confirmation before changing the task list. Reply with `y` or `yes` to
 confirm, or `n` or `no` to cancel. Undo history is kept for the current session
 only.
 
+The confirmation prompt includes the task type, completion status, and full
+task details, for example:
+
+```text
+Confirm undo: remove the task "[T][ ] buy milk"? [yes/no]
+```
+
 Example: `keyword (optional arguments)`
 
 // A description of the expected outcome goes here

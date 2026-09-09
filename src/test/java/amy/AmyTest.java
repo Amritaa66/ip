@@ -24,7 +24,8 @@ class AmyTest {
         Amy amy = createAmy();
 
         amy.getResponse("todo buy milk");
-        assertEquals("Confirm undo: remove the task \"buy milk\"? [yes/no]", amy.getResponse("undo"));
+        assertEquals("Confirm undo: remove the task \"[T][ ] buy milk\"? [yes/no]",
+                amy.getResponse("undo"));
         assertEquals("Undone. I've restored the previous task list.", amy.getResponse("yes"));
         assertEquals("There are no tasks in your list!", amy.getResponse("list"));
     }

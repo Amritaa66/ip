@@ -171,9 +171,10 @@ public class Amy {
         if (parts[0].equals("delete")) {
             ArrayList<Task> snapshot = copyTasks();
             Task deletedTask = tasks.get(taskIndex);
+            String deletedTaskDetails = deletedTask.getFullDisplayText();
             tasks.remove(taskIndex);
             saveTasks(tasks.asList());
-            undoManager.record(snapshot, "restore the deleted task \"" + deletedTask.getDescription() + "\"");
+            undoManager.record(snapshot, "restore the task \"" + deletedTaskDetails + "\"");
             return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
                     + "\nNow you have " + tasks.size() + " tasks in the list.";
         }
@@ -181,13 +182,15 @@ public class Amy {
             ArrayList<Task> snapshot = copyTasks();
             tasks.mark(taskIndex);
             saveTasks(tasks.asList());
-            undoManager.record(snapshot, "restore the task's previous status");
+            undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
+                    + "\" as not done");
             return "Nice! I've marked this task as done:\n  " + tasks.get(taskIndex).getFullDisplayText();
         }
         ArrayList<Task> snapshot = copyTasks();
         tasks.unmark(taskIndex);
         saveTasks(tasks.asList());
-        undoManager.record(snapshot, "restore the task's previous status");
+        undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
+                + "\" as done");
         return "OK, I've marked this task as not done yet:\n  " + tasks.get(taskIndex).getFullDisplayText();
     }
 
@@ -209,7 +212,7 @@ public class Amy {
         ArrayList<Task> snapshot = copyTasks();
         tasks.add(task);
         saveTasks(tasks.asList());
-        undoManager.record(snapshot, "remove the task \"" + task.getDescription() + "\"");
+        undoManager.record(snapshot, "remove the task \"" + task.getFullDisplayText() + "\"");
         return "Got it. I've added this task:\n  " + task.getFullDisplayText()
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
