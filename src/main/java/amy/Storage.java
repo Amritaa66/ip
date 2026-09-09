@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import amy.task.Deadline;
 import amy.task.Event;
@@ -38,12 +40,10 @@ public class Storage {
         // Saving a null collection would silently produce invalid application state.
         assert tasks != null : "Tasks to save must not be null";
         Files.createDirectories(saveFile.getParent());
-        ArrayList<String> savedTasks = new ArrayList<>();
-        for (Task task : tasks) {
-            if (task != null) {
-                savedTasks.add(serializeTask(task));
-            }
-        }
+        ArrayList<String> savedTasks = tasks.stream()
+                .filter(Objects::nonNull)
+                .map(Storage::serializeTask)
+                .collect(Collectors.toCollection(ArrayList::new));
 
         Path temporaryFile = Files.createTempFile(saveFile.getParent(), "amy-", ".tmp");
         try {
