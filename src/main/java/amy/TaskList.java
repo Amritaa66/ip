@@ -16,6 +16,8 @@ public class TaskList {
      * @param tasks the initial tasks
      */
     public TaskList(ArrayList<Task> tasks) {
+        // A task list must always have a backing collection so that all list operations are safe.
+        assert tasks != null : "Task list backing collection must not be null";
         this.tasks = tasks;
     }
 
@@ -58,6 +60,8 @@ public class TaskList {
      * @param task the task to add
      */
     public void add(Task task) {
+        // Null tasks cannot be displayed, serialized, or marked later.
+        assert task != null : "Task list must not contain null tasks";
         tasks.add(task);
     }
 

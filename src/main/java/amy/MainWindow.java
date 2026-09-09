@@ -41,6 +41,8 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        // The controller is injected by Main before the user can interact with the window.
+        assert amy != null : "Amy must be injected before handling user input";
         String input = userInput.getText();
         String response = amy.getResponse(input);
         dialogContainer.getChildren().addAll(

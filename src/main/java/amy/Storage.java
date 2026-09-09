@@ -35,6 +35,8 @@ public class Storage {
      * @throws IOException if the data directory or save file cannot be written
      */
     public void save(ArrayList<Task> tasks) throws IOException {
+        // Saving a null collection would silently produce invalid application state.
+        assert tasks != null : "Tasks to save must not be null";
         Files.createDirectories(saveFile.getParent());
         ArrayList<String> savedTasks = new ArrayList<>();
         for (Task task : tasks) {
