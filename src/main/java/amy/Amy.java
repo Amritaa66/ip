@@ -100,6 +100,14 @@ public class Amy {
             return "Bye. Hope to see you again soon!";
         }
 
+        if (command.equals("dark mode")) {
+            return "Switched to dark mode.";
+        }
+
+        if (command.equals("light mode")) {
+            return "Switched to light mode.";
+        }
+
         try {
             if (command.equals("list")) {
                 return getListResponse();
