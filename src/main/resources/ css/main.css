@@ -8,14 +8,14 @@
 
 .text-field {
     -fx-background-color: #c6e3fa;
-    -fx-font: 20px "Arial";
+    -fx-font: 16px "Arial";
     -fx-text-fill: #263746;
 }
 
 .button {
     -fx-background-color: send-brown;
     -fx-text-fill: white;
-    -fx-font: italic bold 16px "Arial";
+    -fx-font: italic bold 17px "Arial";
 }
 
 .button:hover {
