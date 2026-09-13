@@ -183,7 +183,7 @@ public class Amy {
             tasks.remove(taskIndex);
             saveTasks(tasks.asList());
             undoManager.record(snapshot, "restore the task \"" + deletedTaskDetails + "\"");
-            return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
+            return "Gone for good! I've removed this task:\n  " + deletedTask.getFullDisplayText()
                     + "\nNow you have " + tasks.size() + " tasks in the list.";
         }
         if (parts[0].equals("mark")) {

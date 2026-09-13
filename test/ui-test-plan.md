@@ -657,7 +657,7 @@ On it! I've added this task:
 Now you have 3 tasks in the list.
 ________________________________________________________________________________
 ________________________________________________________________________________
-Noted. I've removed this task:
+Gone for good! I've removed this task:
   [D][ ] return book (by: Apr 24 2025, 5:00pm)
 Now you have 2 tasks in the list.
 ________________________________________________________________________________
@@ -829,7 +829,7 @@ On it! I've added this task:
 Now you have 2 tasks in the list.
 ________________________________________________________________________________
 ________________________________________________________________________________
-Noted. I've removed this task:
+Gone for good! I've removed this task:
   [T][ ] buy milk
 Now you have 1 tasks in the list.
 ________________________________________________________________________________
