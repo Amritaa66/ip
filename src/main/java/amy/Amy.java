@@ -146,9 +146,9 @@ public class Amy {
     /** Returns the response for a list command. */
     private String getListResponse() {
         if (tasks.isEmpty()) {
-            return "There are no tasks in your list!";
+            return "Your list is empty for now!";
         }
-        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
+        StringBuilder response = new StringBuilder("Amy's got your list right here!");
         for (int i = 0; i < tasks.size(); i++) {
             response.append("\n").append(i + 1).append(".").append(tasks.get(i).getFullDisplayText());
         }

@@ -40,7 +40,7 @@ public class MainWindow extends AnchorPane {
     public void setAmy(Amy a) {
         amy = a;
         String savedTasks = amy.getResponse("list");
-        if (!savedTasks.equals("There are no tasks in your list!")) {
+        if (!savedTasks.equals("Your list is empty for now!")) {
             DialogBox dialogBox = DialogBox.getDukeDialog(savedTasks, amyImage, false);
             dialogBox.setDarkMode(isDarkMode);
             dialogContainer.getChildren().add(dialogBox);
