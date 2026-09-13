@@ -62,7 +62,7 @@ public class Ui {
      * Displays Amy's farewell message.
      */
     public void showFarewell() {
-        System.out.println("Bye. Hope to see you again soon!");
+        System.out.println("Lovely to see you! Until next time.");
         showSeparator();
     }
 

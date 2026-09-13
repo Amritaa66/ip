@@ -35,7 +35,7 @@ class AmyTest {
         assertEquals("Confirm undo: remove the task \"[T][ ] buy milk\"? [yes/no]",
                 amy.getResponse("undo"));
         assertEquals("Undone. I've restored the previous task list.", amy.getResponse("yes"));
-        assertEquals("There are no tasks in your list!", amy.getResponse("list"));
+        assertEquals("Your list is empty for now!", amy.getResponse("list"));
     }
 
     @Test
@@ -60,7 +60,7 @@ class AmyTest {
         amy.getResponse("undo");
         amy.getResponse("yes");
 
-        assertEquals("There are no tasks in your list!", amy.getResponse("list"));
+        assertEquals("Your list is empty for now!", amy.getResponse("list"));
     }
 
     @Test

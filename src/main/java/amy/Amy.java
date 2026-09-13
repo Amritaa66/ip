@@ -97,7 +97,7 @@ public class Amy {
             return handleUndoConfirmation(command);
         }
         if (command.equals("bye")) {
-            return "Bye. Hope to see you again soon!";
+            return "Lovely to see you! Until next time.";
         }
 
         if (command.equals("dark mode")) {
@@ -146,9 +146,9 @@ public class Amy {
     /** Returns the response for a list command. */
     private String getListResponse() {
         if (tasks.isEmpty()) {
-            return "There are no tasks in your list!";
+            return "Your list is empty for now!";
         }
-        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
+        StringBuilder response = new StringBuilder("Amy's got your list right here!");
         for (int i = 0; i < tasks.size(); i++) {
             response.append("\n").append(i + 1).append(".").append(tasks.get(i).getFullDisplayText());
         }
@@ -166,7 +166,8 @@ public class Amy {
                 foundMatch = true;
             }
         }
-        return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+        return foundMatch ? response.toString()
+                : "I couldn't find anything matching that. Maybe try again with a different keyword!";
     }
 
     /** Updates a task's completion state or removes it. */
@@ -183,7 +184,7 @@ public class Amy {
             tasks.remove(taskIndex);
             saveTasks(tasks.asList());
             undoManager.record(snapshot, "restore the task \"" + deletedTaskDetails + "\"");
-            return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
+            return "Gone for good! I've removed this task:\n  " + deletedTask.getFullDisplayText()
                     + "\nNow you have " + tasks.size() + " tasks in the list.";
         }
         if (parts[0].equals("mark")) {
@@ -192,14 +193,15 @@ public class Amy {
             saveTasks(tasks.asList());
             undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
                     + "\" as not done");
-            return "Nice! I've marked this task as done:\n  " + tasks.get(taskIndex).getFullDisplayText();
+            return "Great job! One more task conquered:\n  " + tasks.get(taskIndex).getFullDisplayText();
         }
         ArrayList<Task> snapshot = copyTasks();
         tasks.unmark(taskIndex);
         saveTasks(tasks.asList());
         undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
                 + "\" as done");
-        return "OK, I've marked this task as not done yet:\n  " + tasks.get(taskIndex).getFullDisplayText();
+        return "No worries, plans change. I've marked it as incomplete again:\n  "
+                + tasks.get(taskIndex).getFullDisplayText();
     }
 
     /**
@@ -221,7 +223,7 @@ public class Amy {
         tasks.add(task);
         saveTasks(tasks.asList());
         undoManager.record(snapshot, "remove the task \"" + task.getFullDisplayText() + "\"");
-        return "Got it. I've added this task:\n  " + task.getFullDisplayText()
+        return "On it! I've added this task:\n  " + task.getFullDisplayText()
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
