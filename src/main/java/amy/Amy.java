@@ -192,7 +192,7 @@ public class Amy {
             saveTasks(tasks.asList());
             undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
                     + "\" as not done");
-            return "Nice! I've marked this task as done:\n  " + tasks.get(taskIndex).getFullDisplayText();
+            return "Great job! One more task conquered:\n  " + tasks.get(taskIndex).getFullDisplayText();
         }
         ArrayList<Task> snapshot = copyTasks();
         tasks.unmark(taskIndex);
