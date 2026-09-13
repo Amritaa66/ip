@@ -62,4 +62,21 @@ public class DialogBox extends HBox {
         db.flip();
         return db;
     }
+
+    /**
+     * Creates an Amy response dialog, optionally styled as an error.
+     *
+     * @param text the response text
+     * @param img the response image
+     * @param isError whether the response represents an error
+     * @return the styled Amy response dialog
+     */
+    public static DialogBox getDukeDialog(String text, Image img, boolean isError) {
+        DialogBox dialogBox = getDukeDialog(text, img);
+        if (isError) {
+            dialogBox.getStyleClass().add("error-message");
+            dialogBox.dialog.getStyleClass().add("error-label");
+        }
+        return dialogBox;
+    }
 }
