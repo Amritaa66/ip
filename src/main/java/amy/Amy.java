@@ -97,7 +97,7 @@ public class Amy {
             return handleUndoConfirmation(command);
         }
         if (command.equals("bye")) {
-            return "Bye. Hope to see you again soon!";
+            return "Lovely to see you! Until next time.";
         }
 
         if (command.equals("dark mode")) {
@@ -166,7 +166,8 @@ public class Amy {
                 foundMatch = true;
             }
         }
-        return foundMatch ? response.toString() : "There are no matching tasks in your list!";
+        return foundMatch ? response.toString()
+                : "I couldn't find anything matching that. Maybe try again with a different keyword!";
     }
 
     /** Updates a task's completion state or removes it. */
