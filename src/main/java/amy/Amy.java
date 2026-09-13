@@ -222,7 +222,7 @@ public class Amy {
         tasks.add(task);
         saveTasks(tasks.asList());
         undoManager.record(snapshot, "remove the task \"" + task.getFullDisplayText() + "\"");
-        return "Got it. I've added this task:\n  " + task.getFullDisplayText()
+        return "On it! I've added this task:\n  " + task.getFullDisplayText()
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
     }
 
