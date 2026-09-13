@@ -20,6 +20,14 @@ class AmyTest {
     }
 
     @Test
+    void themeCommands_returnThemeChangeConfirmation() {
+        Amy amy = createAmy();
+
+        assertEquals("Switched to dark mode.", amy.getResponse("dark mode"));
+        assertEquals("Switched to light mode.", amy.getResponse("light mode"));
+    }
+
+    @Test
     void undo_confirmedAdd_removesAddedTask() {
         Amy amy = createAmy();
 

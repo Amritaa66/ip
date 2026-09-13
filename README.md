@@ -9,6 +9,12 @@ session only.
 
 Amy stores tasks for both the console and GUI versions in `~/.amy/amy.txt`.
 
+## Switching themes
+
+In the GUI, enter `dark mode` to switch to a midnight-blue theme, or enter
+`light mode` to restore the light theme. Theme changes apply to the current
+session only and reset when Amy is restarted.
+
 For clarity, the confirmation prompt includes the complete task details:
 
 ```text
