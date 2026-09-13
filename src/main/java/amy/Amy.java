@@ -14,6 +14,8 @@ public class Amy {
     private final Parser parser;
     private final Storage storage;
     private final TaskList tasks;
+    private final UndoManager undoManager = new UndoManager();
+    private boolean awaitingUndoConfirmation;
 
     /**
      * Creates Amy with tasks loaded from the specified file.
@@ -78,7 +80,7 @@ public class Amy {
      * @param args command-line arguments, which are not used
      */
     public static void main(String[] args) {
-        new Amy("data/amy.txt").run();
+        new Amy(Storage.getDefaultSavePath()).run();
     }
 
     /**
@@ -91,6 +93,9 @@ public class Amy {
         // GUI commands originate from the text field and must be represented by a string.
         assert input != null : "GUI command input must not be null";
         String command = input.trim();
+        if (awaitingUndoConfirmation) {
+            return handleUndoConfirmation(command);
+        }
         if (command.equals("bye")) {
             return "Bye. Hope to see you again soon!";
         }
@@ -98,6 +103,10 @@ public class Amy {
         try {
             if (command.equals("list")) {
                 return getListResponse();
+            }
+
+            if (command.equals("undo")) {
+                return requestUndo();
             }
 
             if (command.equals("find") || command.equals("mark")
@@ -160,19 +169,28 @@ public class Amy {
             return "That task does not exist.";
         }
         if (parts[0].equals("delete")) {
+            ArrayList<Task> snapshot = copyTasks();
             Task deletedTask = tasks.get(taskIndex);
+            String deletedTaskDetails = deletedTask.getFullDisplayText();
             tasks.remove(taskIndex);
             saveTasks(tasks.asList());
+            undoManager.record(snapshot, "restore the task \"" + deletedTaskDetails + "\"");
             return "Noted. I've removed this task:\n  " + deletedTask.getFullDisplayText()
                     + "\nNow you have " + tasks.size() + " tasks in the list.";
         }
         if (parts[0].equals("mark")) {
+            ArrayList<Task> snapshot = copyTasks();
             tasks.mark(taskIndex);
             saveTasks(tasks.asList());
+            undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
+                    + "\" as not done");
             return "Nice! I've marked this task as done:\n  " + tasks.get(taskIndex).getFullDisplayText();
         }
+        ArrayList<Task> snapshot = copyTasks();
         tasks.unmark(taskIndex);
         saveTasks(tasks.asList());
+        undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
+                + "\" as done");
         return "OK, I've marked this task as not done yet:\n  " + tasks.get(taskIndex).getFullDisplayText();
     }
 
@@ -191,10 +209,43 @@ public class Amy {
                     ? "Please specify a deadline in the format: deadline <description> /by <date/time>."
                     : "Please specify an event in the format: event <description> /from <start> /to <end>.";
         }
+        ArrayList<Task> snapshot = copyTasks();
         tasks.add(task);
         saveTasks(tasks.asList());
+        undoManager.record(snapshot, "remove the task \"" + task.getFullDisplayText() + "\"");
         return "Got it. I've added this task:\n  " + task.getFullDisplayText()
                 + "\nNow you have " + tasks.size() + " tasks in the list.";
+    }
+
+    private ArrayList<Task> copyTasks() {
+        ArrayList<Task> copy = new ArrayList<>();
+        for (Task task : tasks.asList()) {
+            copy.add(task.copy());
+        }
+        return copy;
+    }
+
+    private String requestUndo() {
+        if (!undoManager.canUndo()) {
+            return "There is no command to undo.";
+        }
+        awaitingUndoConfirmation = true;
+        return "Confirm undo: " + undoManager.getLatestDescription() + "? [yes/no]";
+    }
+
+    private String handleUndoConfirmation(String response) {
+        if (response.equalsIgnoreCase("n") || response.equalsIgnoreCase("no")) {
+            awaitingUndoConfirmation = false;
+            return "Undo cancelled.";
+        }
+        if (!response.equalsIgnoreCase("y") && !response.equalsIgnoreCase("yes")) {
+            return "Please answer yes or no.";
+        }
+        ArrayList<Task> snapshot = undoManager.removeLatestSnapshot();
+        tasks.restore(snapshot);
+        saveTasks(tasks.asList());
+        awaitingUndoConfirmation = false;
+        return "Undone. I've restored the previous task list.";
     }
 
 }

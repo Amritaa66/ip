@@ -48,4 +48,13 @@ public class Event extends Task {
         return to;
     }
 
+    @Override
+    public Task copy() {
+        Event copy = new Event(description, from, to);
+        if (isDone) {
+            copy.markAsDone();
+        }
+        return copy;
+    }
+
 }
