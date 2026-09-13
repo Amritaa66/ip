@@ -199,7 +199,8 @@ public class Amy {
         saveTasks(tasks.asList());
         undoManager.record(snapshot, "mark the task \"" + tasks.get(taskIndex).getFullDisplayText()
                 + "\" as done");
-        return "OK, I've marked this task as not done yet:\n  " + tasks.get(taskIndex).getFullDisplayText();
+        return "No worries, plans change. I've marked it as incomplete again:\n  "
+                + tasks.get(taskIndex).getFullDisplayText();
     }
 
     /**
