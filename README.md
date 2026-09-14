@@ -1,27 +1,53 @@
-# Amy project template
+# Amy
 
-## Undoing a command
+Amy is a friendly task-management chatbot available through both a console
+interface and a JavaFX graphical interface.
 
-Enter `undo` to undo the most recent successful task-changing command. Amy
-asks for confirmation before applying the undo. Reply with `y` or `yes` to
-confirm, or `n` or `no` to cancel. Undo history is kept for the current
-session only.
+![Amy GUI](docs/Ui.png)
 
-Amy stores tasks for both the console and GUI versions in `~/.amy/amy.txt`.
+## Features
 
-## Switching themes
+- Add three types of tasks:
+  - `todo <description>` for a regular task.
+  - `deadline <description> /by <date/time>` for a task with a deadline.
+  - `event <description> /from <start> /to <end>` for an event.
+- List all tasks with their type, completion status, and details using `list`.
+- Mark a task as complete with `mark <task number>`.
+- Mark a task as incomplete with `unmark <task number>`.
+- Search task descriptions, without case sensitivity, using `find <keyword>`.
+- Remove a task using `delete <task number>`.
+- Undo the most recent successful task-changing command with `undo`.
+  Amy asks for confirmation before applying the undo and accepts `yes`/`y` or
+  `no`/`n`.
+- Switch between light and dark GUI themes with `light mode` and `dark mode`.
+- Persist tasks between launches in `~/.amy/amy.txt`.
+- Start with an empty task list when the data file does not exist.
+- Skip corrupted records while loading valid saved tasks.
+- Handle unknown commands, missing arguments, invalid task numbers, invalid
+  dates, and invalid undo confirmations with helpful messages.
+- Display the product name **Amy** in the GUI title bar.
+- Show a friendly startup error dialog if the GUI cannot be loaded.
+- Exit the application with `bye`.
 
-In the GUI, enter `dark mode` to switch to a midnight-blue theme, or enter
-`light mode` to restore the light theme. Theme changes apply to the current
-session only and reset when Amy is restarted.
-
-For clarity, the confirmation prompt includes the complete task details:
+## Example commands
 
 ```text
-Confirm undo: remove the task "[T][ ] buy milk"? [yes/no]
+todo buy groceries
+deadline submit report /by 18/9/2026 1800
+event team meeting /from 19/9/2026 1400 /to 19/9/2026 1600
+list
+mark 1
+find report
+undo
+yes
+bye
 ```
 
-This is a project template for a greenfield Java project. The chatbot is named Amy. Given below are instructions on how to use it.
+An undo confirmation includes the complete task details:
+
+```text
+Confirm undo: remove the task "[T][ ] buy groceries"? [yes/no]
+```
 
 ## Setting up in Intellij
 
