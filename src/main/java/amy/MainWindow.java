@@ -36,19 +36,19 @@ public class MainWindow extends AnchorPane {
         getStyleClass().add("amy-window");
     }
 
-    /** Injects the Duke instance */
+    /** Injects the Amy instance. */
     public void setAmy(Amy a) {
         amy = a;
         String savedTasks = amy.getResponse("list");
         if (!savedTasks.equals("Your list is empty for now!")) {
-            DialogBox dialogBox = DialogBox.getDukeDialog(savedTasks, amyImage, false);
+            DialogBox dialogBox = DialogBox.getAmyDialog(savedTasks, amyImage, false);
             dialogBox.setDarkMode(isDarkMode);
             dialogContainer.getChildren().add(dialogBox);
         }
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
+     * Creates two dialog boxes, one echoing user input and the other containing Amy's reply and then appends them to
      * the dialog container. Clears the user input after processing.
      */
     @FXML
@@ -58,7 +58,7 @@ public class MainWindow extends AnchorPane {
         String input = userInput.getText();
         String response = amy.getResponse(input);
         DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
-        DialogBox amyDialog = DialogBox.getDukeDialog(response, amyImage, isErrorResponse(response));
+        DialogBox amyDialog = DialogBox.getAmyDialog(response, amyImage, isErrorResponse(response));
         userDialog.setDarkMode(isDarkMode);
         amyDialog.setDarkMode(isDarkMode);
         dialogContainer.getChildren().addAll(userDialog, amyDialog);

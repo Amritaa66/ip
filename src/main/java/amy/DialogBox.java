@@ -62,7 +62,7 @@ public class DialogBox extends HBox {
         return new DialogBox(text, img);
     }
 
-    public static DialogBox getDukeDialog(String text, Image img) {
+    public static DialogBox getAmyDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();
         return db;
@@ -76,8 +76,8 @@ public class DialogBox extends HBox {
      * @param isError whether the response represents an error
      * @return the styled Amy response dialog
      */
-    public static DialogBox getDukeDialog(String text, Image img, boolean isError) {
-        DialogBox dialogBox = getDukeDialog(text, img);
+    public static DialogBox getAmyDialog(String text, Image img, boolean isError) {
+        DialogBox dialogBox = getAmyDialog(text, img);
         if (isError) {
             dialogBox.getStyleClass().add("error-message");
             dialogBox.dialog.getStyleClass().add("error-label");
